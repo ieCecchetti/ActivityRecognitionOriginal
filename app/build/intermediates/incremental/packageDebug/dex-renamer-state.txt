@@ -1,0 +1,7 @@
+#Thu May 18 21:21:25 CEST 2017
+base.0=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_13b4e2677199aa54339760a45e7b6abd81b8a85e\\classes.dex
+base.1=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_13b4e2677199aa54339760a45e7b6abd81b8a85e
+file.0=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5\\classes.dex

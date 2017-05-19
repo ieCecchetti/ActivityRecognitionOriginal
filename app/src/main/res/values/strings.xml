@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Activity_Recognition</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_settings">Settings</string>
+    //--------------------------------------------------------------------INTRO
+
+    <string name="welcome_title">WELCOME IN ACTIVITY RECOGNITION</string>
+    <string name="welcome_collaborator">Software by Enrico Cecchetti</string>
+
+
+    //---------------------------------------------------------------------CUSTOM SETTINGS
+
+    <string name="pref_header_custom">Custom</string>
+
+    <string name="pref_record_Band">Record Band Data</string>
+    <string name="pref_record_Phone">Record Phone Data</string>
+    <string name="pref_record_Beacons">Record Beacons Data</string>
+    <string name="pref_record_Band_info">Enable recording from band sensors</string>
+    <string name="pref_record_Phone_info">Enable recording from phone sensors</string>
+    <string name="pref_record_Beacons_info">Enable recording rooms beacon data</string>
+
+    <string name="pref_record_folderName_display_name">Standard Folder Name</string>
+    <string name="pref_record_folderName_display_info">New record standard FolderName</string>
+    <string name="pref_record_folderName_model">ActivityRec_data</string>
+
+    //--------------------------------------------------------------------NOTIFICATION
+    <string name="main_notification_title">Activity Recognition</string>
+    <string name="main_notification_ticker">This is the ticker</string>
+    <string name="main_notification_content">Tap for enter in the application</string>
+
+    //--------------------------------------------------------------------FRAME 1
+    <string name="frame_1_Head">ACTIVITY RECOGNITION TOOL</string>
+    <string name="frame_1_Intro">Welcome in the activity recognition tool. Having fun recording your movement!</string>
+
+    //--------------------------------------------------------------------FRAME 3
+    <string name="str_Intro">The activity recognition program will record your data from phones sensor and band, please select the folder and start the session...Enjoy</string>
+    <string name="str_Status">Recorders Status: </string>
+
+    <string name="str_phone">Phone Sensors</string>
+    <string name="str_band">Band Sensors</string>
+    <string name="str_beacon">Beacons Finder</string>
+
+
+
+
+</resources>
