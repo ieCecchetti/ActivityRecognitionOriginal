@@ -20,12 +20,12 @@
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
-        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
-        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.1.0\\res\\drawable\\navigation_empty_icon.xml"
-    },
-    {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg.xml",
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
+        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.1.0\\res\\drawable\\navigation_empty_icon.xml"
     },
     {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
@@ -52,6 +52,10 @@
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\abc_cab_background_internal_bg.xml"
     },
     {
+        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\beaconstatus.png",
+        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\src\\main\\res\\drawable\\beaconstatus.png"
+    },
+    {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\abc_seekbar_thumb_material.xml"
     },
@@ -72,6 +76,10 @@
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\abc_ratingbar_small_material.xml"
     },
     {
+        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\phonestatus.png",
+        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\src\\main\\res\\drawable\\phonestatus.png"
+    },
+    {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
     },
@@ -90,6 +98,10 @@
     {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\pause.png",
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\src\\main\\res\\drawable\\pause.png"
+    },
+    {
+        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bandstatus.png",
+        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\src\\main\\res\\drawable\\bandstatus.png"
     },
     {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",

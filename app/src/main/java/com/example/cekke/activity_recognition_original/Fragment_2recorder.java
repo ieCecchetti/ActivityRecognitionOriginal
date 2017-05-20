@@ -4,9 +4,6 @@ package com.example.cekke.activity_recognition_original;
  * Created by cekke on 17/05/2017.
  */
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Handler;
@@ -23,6 +20,7 @@ public class Fragment_2recorder extends Fragment {
 
     private TextView feature1, feature2, feature3, feature4, feature5;
     private TextView activityTextView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,15 +42,23 @@ public class Fragment_2recorder extends Fragment {
 
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getContext() ,"Recording has started!",Toast.LENGTH_SHORT).show();
+                //create looper for check status and generate start allarm...
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                MainActivity.creatorStatusLooper();
+                MainActivity.startRepeatingTask();
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         // Start Recording after 6 seconds (waiting for clean data)
                         MainActivity.contData=0;
+                        MainActivity.folder=MainActivity.getStandardFolderName().replace("data", MainActivity.getDate());
                         MainActivity.started = true;
+
+                        if (MainActivity.initNewSession()) {
+                            MainActivity.startBandRecording();
+                        }
                     }
                 }, 6000);
             }
@@ -78,8 +84,6 @@ public class Fragment_2recorder extends Fragment {
             }
         });
 
-
-
         return rootView;
     }
 
@@ -94,4 +98,7 @@ public class Fragment_2recorder extends Fragment {
         feature5.setText(String.valueOf(MainActivity.stdDevXYZ));
         activityTextView.setText(MainActivity.currentActivity);
     }
+
+
+
 }

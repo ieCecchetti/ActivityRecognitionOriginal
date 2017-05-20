@@ -1,8 +1,10 @@
 package com.example.cekke.activity_recognition_original;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,26 +12,68 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
-
+import com.microsoft.band.BandClient;
+import com.microsoft.band.BandClientManager;
+import com.microsoft.band.BandException;
+import com.microsoft.band.BandInfo;
+import com.microsoft.band.ConnectionState;
+import com.microsoft.band.UserConsent;
+import com.microsoft.band.sensors.BandAccelerometerEvent;
+import com.microsoft.band.sensors.BandAccelerometerEventListener;
+import com.microsoft.band.sensors.BandGsrEvent;
+import com.microsoft.band.sensors.BandGsrEventListener;
+import com.microsoft.band.sensors.BandGyroscopeEvent;
+import com.microsoft.band.sensors.BandGyroscopeEventListener;
+import com.microsoft.band.sensors.BandHeartRateEvent;
+import com.microsoft.band.sensors.BandHeartRateEventListener;
+import com.microsoft.band.sensors.BandRRIntervalEvent;
+import com.microsoft.band.sensors.BandRRIntervalEventListener;
+import com.microsoft.band.sensors.BandSkinTemperatureEvent;
+import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
+import com.microsoft.band.sensors.GsrSampleRate;
+import com.microsoft.band.sensors.HeartRateConsentListener;
+import com.microsoft.band.sensors.SampleRate;
 import net.sf.javaml.utils.MathUtils;
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Locale;
 
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener,BeaconConsumer {
 
     //-----------------------------------------------------------settings option
     public static boolean phoneRec=true;
@@ -50,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //-----------------------------------------------------------global variables
     private Sensor accellerometer;
     private SensorManager SM;
+    private SensorManager SM1;
     public static double[] valueListX = new double[100];
     public static double[] valueListY = new double[100];
     public static double[] valueListZ = new double[100];
@@ -60,9 +105,66 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static double YmeansModule;
     public static double ZmeansModule;
     public static double stdDevXYZ;
-
-
     public static String currentActivity="Activity : None";
+    private boolean exit=false;
+
+    //-----------------------------------------------------------band variables
+
+    public static FileOutputStream HRos=null;
+    public static FileOutputStream GSRos=null;
+    public static FileOutputStream RRos=null;
+    public static FileOutputStream STos=null;
+    public static FileOutputStream Accos=null;
+    public static FileOutputStream Gyros=null;
+    public static FileOutputStream Taccos=null;
+
+    public static File HRlog;
+    public static File GSRlog;
+    public static File RRlog;
+    public static File STlog;
+    public static File Acclog;
+    public static File Gyrolog;
+
+    public static Context mContext;
+
+    //-----------------------------------------------------------beacons variables
+    protected final String TAG = "RangingActivity";
+    private String actualBeacon="";
+    private BeaconManager beaconManager;
+    private String beaconsDesc;
+
+    //-----------------------------------------------------------folder and general path
+    public static String appFolder="ActivityRecognitionOfficial";
+    public static String path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+    public static String folder="ActivityRec_data";
+    public static final String folderBand="Band";
+    public static final String folderBeacons="Beacons";
+    public static final String folderPhoneData="Phone";
+
+    //-----------------------------------------------------------define the time for checking devices
+    private long lastCheck;
+    public static boolean phoneStatus=false;
+    public static boolean bandStatus=false;
+    public static boolean beaconStatus=false;
+    public static int m_interval = 1000; // 1 seconds by default, can be changed later
+    public static Handler m_handler;
+    private static BandClient client = null;
+
+    //-----------------------------------------------------------define the starting folder
+    public static EditText eTdirectory;
+
+    //-----------------------------------------------------------intro
+    private long time=0;
+
+    //-----------------------------------------------------------status checker
+    private static boolean stateHros;
+    private static boolean stateGSRos;
+    private static boolean stateRRos;
+    private static boolean stateSTos;
+    private static boolean stateAccos;
+    private static boolean stateGyros;
+    private static boolean stateTaccos;
+    private static boolean checker;
 
 
 
@@ -113,6 +215,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_GAME); //20ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
+        SM1=(SensorManager)getSystemService(SENSOR_SERVICE);
+        accellerometer= SM1.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        //SM1.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_NORMAL); //0ms
+        SM1.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_GAME); //20ms
+        //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
+        //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
+
+
+        //--------------------------------------------------------------------------BEACONS SETTINGS
+        beaconManager = BeaconManager.getInstanceForApplication(this);
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        /*
+            m - matching byte sequence for this beacon type to parse (exactly one required)
+
+            s - ServiceUuid for this beacon type to parse (optional, only for Gatt-based beacons)
+
+            i - identifier (at least one required, multiple allowed)
+
+            p - power calibration field (exactly one required)
+
+            d - data field (optional, multiple allowed)
+
+            x - extra layout. Signifies that the layout is secondary to a primary layout with the same matching byte sequence (or ServiceUuid). Extra layouts do not require power or identifier fields and create Beacon objects without identifiers.
+
+            Example of a parser string for AltBeacon:
+
+            "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"
+         */
+        beaconManager.bind(this);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -127,6 +258,63 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //startRepeatingTask();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SM.unregisterListener(this);
+        SM1.unregisterListener(this);
+        //stopRepeatingTask();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit)
+        {
+            this.finish();
+        }else{
+            exit=true;
+            Toast.makeText(getBaseContext(),"Press return to shut application!",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        beaconManager.unbind(this);
+        if (client != null) {
+            try {
+                client.disconnect().await();
+                HRos.close();
+                GSRos.close();
+                RRos.close();
+                STos.close();
+                Accos.close();
+                Gyros.close();
+                Taccos.close();
+            } catch (InterruptedException e) {
+                // Do nothing as this is happening during destroy
+            } catch (BandException e) {
+                // Do nothing as this is happening during destroy
+            } catch (IOException e) {
+
+            }
+        }
+        super.onDestroy();
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+    public static Activity getActivity(){return getActivity();}
+
+    final WeakReference<Activity> reference = new WeakReference<Activity>(this);
 
 
     @Override
@@ -149,39 +337,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        if(started)
-        {
-            if(contData!=99){
-                contData++;
-
-                valueListX[contData]=(event.values[0]);
-                valueListY[contData]=(event.values[1]);
-                valueListZ[contData]=(event.values[2]);
-
-
-            }else{
-                contData=0;
-                started=false;
-                //Toast.makeText(MainActivity.this,"Record has finished!",Toast.LENGTH_SHORT).show();
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
-                //Toast.makeText(getContext() ,"Recording has stopped!",Toast.LENGTH_SHORT).show();
-                processData();
-                fragRecorder.getDataFromMainClass();
-            }
-
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
 
@@ -237,13 +392,53 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        if(started)
+        {
+            if(contData!=99){
+                contData++;
+
+                valueListX[contData]=(event.values[0]);
+                valueListY[contData]=(event.values[1]);
+                valueListZ[contData]=(event.values[2]);
+                savePhoneSens(event);
+
+
+            }else{
+                contData=0;
+                started=false;
+                stopRepeatingTask();
+                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
+                processData();
+                fragRecorder.getDataFromMainClass();
+            }
+
+
+
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
     public static void getRecordersFromSettings(boolean phone, boolean beacon, boolean band)
     {
         phoneRec= phone;
         beaconRec=beacon;
         bandRec=band;
     }
-    public static void getStandardFolderName(String name)
+    public static String getStandardFolderName()
+    {
+        return FolderNameStandard;
+    }
+
+    public static void setStandardFolderName(String name)
     {
         FolderNameStandard=name;
     }
@@ -374,4 +569,644 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         return sum/(100-1);
     }
+
+    public static String getDate(){
+        DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+        String date=dfDate.format(Calendar.getInstance().getTime());
+        DateFormat dfTime = new SimpleDateFormat("HH-mm");
+        String time = dfTime.format(Calendar.getInstance().getTime());
+        return date + "_" + time;
+    }
+
+    public static boolean initNewSession() {
+
+        path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+        File file = new File(path, appFolder);
+        if (!file.exists()) {
+            try {
+                file.mkdir();
+            } catch (SecurityException e) {
+            }
+        }
+        path+= "/"+appFolder;
+
+        file = new File(path, folder);
+        if (!file.exists()) {
+            try {
+                file.mkdir();
+            } catch (SecurityException e) {
+            }
+        }
+
+        file = new File(path+"/"+ folder, folderBand);
+
+        if (!file.exists()) {
+            try {
+                file.mkdir();
+            } catch (SecurityException e) {
+            }
+        }
+
+        HRlog = new File(file,"HRlog.txt");
+        GSRlog = new File(file,"GSRlog.txt");
+        RRlog = new File(file,"RRlog.txt");
+        STlog = new File(file,"STlog.txt");
+        Acclog = new File(file,"Acclog.txt");
+        Gyrolog = new File(file,"Gyrolog.txt");
+
+
+
+        try {
+            HRlog.createNewFile();
+            GSRlog.createNewFile();
+            RRlog.createNewFile();
+            STlog.createNewFile();
+            Acclog.createNewFile();
+            Gyrolog.createNewFile();
+        } catch (IOException e) {
+            Log.d("App",String.format("Errore: "+e));
+        }
+        try {
+            HRos = new FileOutputStream(HRlog);
+            GSRos = new FileOutputStream(GSRlog);
+            RRos = new FileOutputStream(RRlog);
+            STos = new FileOutputStream(STlog);
+            Accos = new FileOutputStream(Acclog);
+            Gyros = new FileOutputStream(Gyrolog);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private static String TimeIncr(String Time)
+    {
+        String[] separated = Time.split(":");
+        int min = Integer.parseInt(separated[0]);
+        int sec = Integer.parseInt(separated[1].split(" ")[0]);
+        sec++;
+        if(sec==60)
+        {
+            sec=0;
+            min++;
+        }
+        String newTime=min+":"+sec+" min";
+        return newTime;
+    }
+
+    static Runnable m_statusChecker = new Runnable()
+    {
+        @Override
+        public void run() {
+            String substr=Fragment_3status.getRecordTime().substring(0,4);
+            Fragment_3status.setRecordTime(TimeIncr(substr));
+            Fragment_3status.printListenerStatus();
+            refreshListenerStatus(); //this function can change value of m_interval.
+            m_handler.postDelayed(m_statusChecker, m_interval);
+        }
+    };
+
+    public static void startRepeatingTask()
+    {
+        m_statusChecker.run();
+    }
+
+    public void stopRepeatingTask()
+    {
+        m_handler.removeCallbacks(m_statusChecker);
+    }
+
+    public static void creatorStatusLooper()
+    {
+        //DEFINING THE TREAD FOR CHECKING DEVICE STATUS
+        m_handler = new Handler();
+    }
+
+    public static void refreshListenerStatus(){
+        bandStatus= checkAllStatus();
+        phoneStatus=false;
+        bandStatus=false;
+        beaconStatus=false;
+        resetAllStatus();
+    }
+
+    public static boolean checkAllStatus()
+    {
+        Log.i("CHECK",stateHros+"+"+stateRRos+"+"+stateSTos+"+"+stateAccos+"+"+stateGSRos+"+"+stateGyros);
+        return stateHros&&stateRRos&&stateSTos&&stateAccos&&stateGSRos&&stateGyros;
+    }
+
+    public static void resetAllStatus(){
+        stateGSRos=false;
+        stateAccos=false;
+        stateRRos=false;
+        stateGyros=false;
+        stateHros=false;
+    }
+
+    private void savePhoneSens(SensorEvent event)
+    {
+        String tipo = null;
+        String sensType = null;
+        String dati = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
+            tipo = event.sensor.getStringType();
+        }
+        if (tipo.equals("android.sensor.accelerometer")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+            Calendar c = Calendar.getInstance();
+            dati = String.valueOf(event.values[0]) +
+                    " " + String.valueOf(event.values[1]) +
+                    " " + String.valueOf(event.values[2]) +
+                    " " + sdf.format(c.getTime()) + ";\n";
+            sensType = "Accelerometer";
+        } else if (tipo.equals("android.sensor.gyroscope")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+            Calendar c = Calendar.getInstance();
+            dati = String.valueOf(event.values[0]) +
+                    " " + String.valueOf(event.values[1]) +
+                    " " + String.valueOf(event.values[2]) +
+                    " " + sdf.format(c.getTime()) + ";\n";
+            sensType = "Gyroscope";
+        }
+        File root = new File(path+ "/" + folder, folderPhoneData);
+        if (!root.exists()) {
+            root.mkdirs(); // this will create folder.
+        }
+
+
+        OutputStreamWriter outStreamWriter = null;
+        File out = new File(root, sensType + ".txt");  // file path to save
+
+        if (out.exists() == false) {
+            try {
+                out.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Taccos = new FileOutputStream(out, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        outStreamWriter = new OutputStreamWriter(Taccos);
+
+        try {
+            outStreamWriter.append(dati);
+            phoneStatus = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            outStreamWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //---------------------------------------------------------------------------------------------// band procedure
+
+    private static BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
+        @Override
+        public void onBandGsrChanged(BandGsrEvent event) {
+            if ((event != null)&&started) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.format(event.getResistance()+" "+sdf.format(c.getTime())+";\n\r");
+                try {
+                    stateGSRos=true;
+                    GSRos.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (GSR)");
+                }
+            }
+        }
+    };
+
+    private static BandRRIntervalEventListener mRRIntervalEventListener = new BandRRIntervalEventListener() {
+        @Override
+        public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
+            if ((event != null)&&started) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.format(event.getInterval()+" "+sdf.format(c.getTime())+";\n\r");
+                try {
+                    stateRRos=true;
+                    RRos.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (RR)");
+                }
+            }
+        }
+    };
+
+    private static BandSkinTemperatureEventListener mSkinTemperatureEventListener = new BandSkinTemperatureEventListener() {
+        @Override
+        public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent bandSkinTemperatureEvent) {
+            if ((bandSkinTemperatureEvent != null)&&started) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.format(bandSkinTemperatureEvent.getTemperature()+" "+sdf.format(c.getTime())+";\n\r");
+                try {
+                    stateSTos=true;
+                    STos.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (ST)");
+                }
+            }
+        }
+    };
+    private static BandAccelerometerEventListener accelerometerEventListener = new BandAccelerometerEventListener() {
+        @Override
+        public void onBandAccelerometerChanged(BandAccelerometerEvent bandAccelerometerEvent) {
+            if((bandAccelerometerEvent != null)&&started){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8)+" "+
+                        String.valueOf(bandAccelerometerEvent.getAccelerationY()*9.8)+" "+
+                        String.valueOf(bandAccelerometerEvent.getAccelerationZ()*9.8)+ " "+
+                        sdf.format(c.getTime())+";\n\r";
+                try {
+                    stateAccos=true;
+                    Accos.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (Acc)");
+                }
+            }
+        }
+
+    };
+
+    private static BandGyroscopeEventListener gyroscopeEventListener = new BandGyroscopeEventListener() {
+        @Override
+        public void onBandGyroscopeChanged(BandGyroscopeEvent bandGyroscopeEvent) {
+
+            if((gyroscopeEventListener!= null)&&started){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.valueOf(bandGyroscopeEvent.getAngularVelocityX())+" "+
+                        String.valueOf(bandGyroscopeEvent.getAngularVelocityY())+" "+
+                        String.valueOf(bandGyroscopeEvent.getAngularVelocityZ())+ " "+
+                        sdf.format(c.getTime())+";\n\r";
+                try {
+                    stateGyros=true;
+                    Gyros.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (Acc)");
+                }
+            }
+        }
+    };
+
+    private static BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
+        @Override
+        public void onBandHeartRateChanged(final BandHeartRateEvent event) {
+            if ((event != null)&&started) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                Calendar c = Calendar.getInstance();
+                String string = String.format(event.getHeartRate()+" "+sdf.format(c.getTime())+";\n\r");
+                try {
+                    stateHros=true;
+                    HRos.write(string.getBytes());
+                } catch (IOException e) {
+                    Log.i("bandError","Attenzione:scrittura fallita (HR)");
+                }
+            }
+        }
+    };
+
+    private static class GsrSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    Log.i("bandError","Band is connected.\n");
+                    client.getSensorManager().registerGsrEventListener(mGsrEventListener, GsrSampleRate.MS200);
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private static class SkinTemperatureSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    Log.i("bandError","Band is connected.\n");
+                    client.getSensorManager().registerSkinTemperatureEventListener(mSkinTemperatureEventListener);
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private static class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    int hardwareVersion = Integer.parseInt(client.getHardwareVersion().await());
+                    if (hardwareVersion >= 20) {
+                        if (client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                            client.getSensorManager().registerRRIntervalEventListener(mRRIntervalEventListener);
+                        } else {
+                            Log.i("bandError","You have not given this application consent to access heart rate data yet."
+                                    + " Please press the Heart Rate Consent button.\n");
+                        }
+                    } else {
+                        Log.i("bandError","The RR Interval sensor is not supported with your Band version. Microsoft Band 2 is required.\n");
+                    }
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private static class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    if (client.getSensorManager().getCurrentHeartRateConsent() == UserConsent.GRANTED) {
+                        client.getSensorManager().registerHeartRateEventListener(mHeartRateEventListener);
+                    } else {
+                        Log.i("bandError","You have not given this application consent to access heart rate data yet."
+                                + " Please press the Heart Rate Consent button.\n");
+                    }
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+    private static class AccelerometerSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    Log.i("bandError","Band is connected.\n");
+                    client.getSensorManager().registerAccelerometerEventListener(accelerometerEventListener, SampleRate.MS32);
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private static class GyroscopeSubscriptionTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                if (getConnectedBandClient()) {
+                    Log.i("bandError","Band is connected.\n");
+                    client.getSensorManager().registerGyroscopeEventListener(gyroscopeEventListener, SampleRate.MS32);
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+    private static class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
+        @Override
+        protected Void doInBackground(WeakReference<Activity>... params) {
+            Log.d("Lucia",String.format("Sto chiedendo il consenso"));
+            try {
+                if (getConnectedBandClient()) {
+
+                    if (params[0].get() != null) {
+                        client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
+                            @Override
+                            public void userAccepted(boolean consentGiven) {
+                            }
+                        });
+                    }
+                } else {
+                    Log.i("bandError","Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                Log.i("bandError",exceptionMessage);
+
+            } catch (Exception e) {
+                Log.i("bandError",e.getMessage());
+            }
+            return null;
+        }
+    }
+
+
+    private static boolean getConnectedBandClient() throws InterruptedException, BandException {
+        if (client == null) {
+            BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
+            if (devices.length == 0) {
+                Log.i("bandError","Band isn't paired with your phone.\n");
+                return false;
+            }
+            client = BandClientManager.getInstance().create(getContext(), devices[0]);
+        } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
+            return true;
+        }
+
+        Log.i("bandError","Band is connecting...\n");
+        return ConnectionState.CONNECTED == client.connect().await();
+    }
+
+    public static void startBandRecording()
+    {
+        new HeartRateSubscriptionTask().execute();
+        new GsrSubscriptionTask().execute();
+        new RRIntervalSubscriptionTask().execute();
+        new SkinTemperatureSubscriptionTask().execute();
+        new AccelerometerSubscriptionTask().execute();
+        new GyroscopeSubscriptionTask().execute();
+        //new HeartRateConsentTask().execute(reference);
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+
+        beaconManager.setRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                if ((beacons.size() > 0)&&started) {
+                    //stamp for the number of beacons in region
+                    beaconStatus = true;
+                    for (Beacon beacon : beacons) {
+                        beaconsDesc = beacon.getId2() +
+                                " " + beacon.getId3() +
+                                " " + beacon.getRssi() + " ";
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                        Calendar c = Calendar.getInstance();
+                        beaconsDesc += sdf.format(c.getTime()) + ";\n";
+                        File root = new File(path+ "/" + folder, folderBeacons);
+                        if (!root.exists()) {
+                            root.mkdirs(); // this will create folder.
+                        }
+                        OutputStreamWriter outStreamWriter = null;
+                        File out = new File(root, "Beacons.txt");  // file path to save
+
+                        if (out.exists() == false) {
+                            try {
+                                out.createNewFile();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try {
+                            Taccos = new FileOutputStream(out, true);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        outStreamWriter = new OutputStreamWriter(Taccos);
+
+                        try {
+                            outStreamWriter.append(beaconsDesc);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            outStreamWriter.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+        try {
+            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+        } catch (RemoteException e) {
+        }
+
+    }
+
 }

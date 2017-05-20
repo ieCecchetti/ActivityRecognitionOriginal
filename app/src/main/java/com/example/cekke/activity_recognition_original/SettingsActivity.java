@@ -218,7 +218,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         String fname=prefs.getString("example_text","ActivityRec_data");
 
         MainActivity.getRecordersFromSettings(phoneRec,beaconsRec,bandRec);
-        MainActivity.getStandardFolderName(fname);
+        MainActivity.setStandardFolderName(fname);
 
 
 
