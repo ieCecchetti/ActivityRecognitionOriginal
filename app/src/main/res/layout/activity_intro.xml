@@ -33,7 +33,7 @@
             android:gravity="center"/>
 
         <ImageView
-            app:srcCompat="@drawable/activityrec"
+            android:src="@drawable/activityrec"
             android:layout_marginTop="60dp"
             android:id="@+id/imageView"
             android:layout_below="@+id/tv_welcomeTitle"

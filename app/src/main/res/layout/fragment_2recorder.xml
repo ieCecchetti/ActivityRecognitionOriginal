@@ -47,15 +47,24 @@
         android:layout_below="@+id/tv_customTraining"
         android:layout_marginLeft="30dp"/>
 
-    <Button
-        android:text="ProcessData"
+    <TextView
+        android:text="RECORDING TIME"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_alignLeft="@id/ib_startRec"
+        android:layout_alignBaseline="@+id/ib_startRec"
+        android:layout_alignStart="@id/ib_startRec"
         android:layout_marginLeft="100dp"
-        android:layout_below="@id/tv_customTraining"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="130dp"
+        android:id="@+id/tv_f2_recordtime_desc" />
+
+    <TextView
+        android:text="00:00 min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tv_f2_recordtime_desc"
+        android:layout_marginTop="150dp"
+        android:textSize="20dp"
+        android:id="@+id/tv_f2_recordtime" />
 
     <TextView
         android:text="FEATURES CALCOLATE : "

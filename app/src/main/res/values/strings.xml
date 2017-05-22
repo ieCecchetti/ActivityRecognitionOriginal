@@ -29,10 +29,6 @@
     <string name="main_notification_ticker">This is the ticker</string>
     <string name="main_notification_content">Tap for enter in the application</string>
 
-    //--------------------------------------------------------------------FRAME 1
-    <string name="frame_1_Head">ACTIVITY RECOGNITION TOOL</string>
-    <string name="frame_1_Intro">Welcome in the activity recognition tool. Having fun recording your movement!</string>
-
     //--------------------------------------------------------------------FRAME 3
     <string name="str_Intro">The activity recognition program will record your data from phones sensor and band, please select the folder and start the session...Enjoy</string>
     <string name="str_Status">Recorders Status: </string>
@@ -40,6 +36,26 @@
     <string name="str_phone">Phone Sensors</string>
     <string name="str_band">Band Sensors</string>
     <string name="str_beacon">Beacons Finder</string>
+
+    //--------------------------------------------------------------------FRAME 1
+    <string name="frame_1_Head">ACTIVITY RECOGNITION TOOL</string>
+    <string name="frame_1_Intro">Welcome in the activity recognition tool. Having fun recording your movement!</string>
+    <string name="card_one">First fucking Card man</string>
+    <string name="card_one_text">
+        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
+        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+    </string>
+
+    <string name="card_two">Second fucking Card man</string>
+    <string name="card_two_text">
+        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
+        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+    </string>
+    <string name="card_three">Third fucking Card man</string>
+    <string name="card_three_text">
+        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
+        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+    </string>
 
 
 

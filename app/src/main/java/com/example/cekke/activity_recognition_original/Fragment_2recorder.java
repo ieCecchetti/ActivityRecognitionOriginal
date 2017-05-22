@@ -20,6 +20,8 @@ public class Fragment_2recorder extends Fragment {
 
     private TextView feature1, feature2, feature3, feature4, feature5;
     private TextView activityTextView;
+    private static TextView tvRecordTime;
+
 
 
     @Override
@@ -35,6 +37,7 @@ public class Fragment_2recorder extends Fragment {
         activityTextView = (TextView) rootView.findViewById(R.id.et_Activity);
         activityTextView.setText("Activity : None");
         activityTextView.setEnabled(false);
+        tvRecordTime = (TextView) rootView.findViewById(R.id.tv_f2_recordtime);
 
 
         ImageButton buttonStart =(ImageButton) rootView.findViewById(R.id.ib_startRec);
@@ -97,6 +100,16 @@ public class Fragment_2recorder extends Fragment {
         feature4.setText(String.valueOf(MainActivity.ZmeansModule));
         feature5.setText(String.valueOf(MainActivity.stdDevXYZ));
         activityTextView.setText(MainActivity.currentActivity);
+    }
+
+    public static String getRecordTime()
+    {
+        return tvRecordTime.getText().toString();
+    }
+
+    public static void setRecordTime(String Time)
+    {
+        tvRecordTime.setText(Time);
     }
 
 

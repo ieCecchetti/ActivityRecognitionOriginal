@@ -12,7 +12,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //-----------------------------------------------------------notification option
     Notification.Builder notification;
     private static final int uniqueId = 45612;
+    NotificationManager nm;
 
     //-----------------------------------------------------------fragments
     private Fragment_1intro fragIntro= new Fragment_1intro();
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //-----------------------------------------------------------global variables
     private Sensor accellerometer;
+    private Sensor gyroscope;
     private SensorManager SM;
     private SensorManager SM1;
     public static double[] valueListX = new double[100];
@@ -190,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         setContentView(R.layout.activity_main);
 
+        //final Toolbar toolbar= (Toolbar) findViewById(R.id.MyToolbar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //settings reset code
         //PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
 
@@ -216,9 +221,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
         SM1=(SensorManager)getSystemService(SENSOR_SERVICE);
-        accellerometer= SM1.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        gyroscope= SM1.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         //SM1.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_NORMAL); //0ms
-        SM1.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_GAME); //20ms
+        SM1.registerListener(this, gyroscope,SensorManager.SENSOR_DELAY_GAME); //20ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
 
@@ -305,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             }
         }
+        nm.cancel(uniqueId);
         super.onDestroy();
     }
 
@@ -381,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 case 0:
                     return "INTRO";
                 case 1:
-                    return "RECORDER";
+                    return "RECORD";
                 case 2:
                     return "STATUS";
                 case 3:
@@ -395,7 +401,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if(started)
+        int eType = event.sensor.getType();
+
+        if(started && (eType == Sensor.TYPE_ACCELEROMETER))
         {
             if(contData!=99){
                 contData++;
@@ -421,6 +429,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         }
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -459,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         notification.setContentIntent(notificationPendingIntent);
 
         //Build notification and issues it
-        NotificationManager nm= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(uniqueId, notification.build());
     }
 
@@ -480,8 +489,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //feature4.setText(String.valueOf(ZmeansModule));
 
         stdDevXYZ = Math.sqrt(variance(valueListX,Xmeans,100)+
-                variance(valueListX,Xmeans,100)+
-                variance(valueListX,Xmeans,100));
+                variance(valueListY,Ymeans,100)+
+                variance(valueListZ,Zmeans,100));
         //feature5.setText(String.valueOf(stdDevXYZ));
 
 
@@ -660,8 +669,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     {
         @Override
         public void run() {
-            String substr=Fragment_3status.getRecordTime().substring(0,4);
-            Fragment_3status.setRecordTime(TimeIncr(substr));
+            String substr=Fragment_2recorder.getRecordTime().substring(0,4);
+            Fragment_2recorder.setRecordTime(TimeIncr(substr));
             Fragment_3status.printListenerStatus();
             refreshListenerStatus(); //this function can change value of m_interval.
             m_handler.postDelayed(m_statusChecker, m_interval);

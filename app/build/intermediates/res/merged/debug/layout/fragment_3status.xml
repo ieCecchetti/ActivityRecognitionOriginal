@@ -25,38 +25,19 @@
         android:layout_marginTop="30dp"
         android:id="@+id/tv_f3_intro" />
 
-    <TextView
-        android:text="RECORDING TIME"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_f3_intro"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tv_f3_recordtime_desc" />
-
-    <TextView
-        android:text="00:00 min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_f3_recordtime_desc"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="30dp"
-        android:id="@+id/tv_f3_recordtime" />
 
     <TextView
         android:text="CHECK RECORDER STATUS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="90dp"
         android:id="@+id/tv_f3_recorderstatus_desc"
-        android:layout_below="@+id/tv_f3_recordtime" />
+        android:layout_below="@+id/tv_intro" />
 
     <ImageView
         android:layout_width="50dp"
-        android:layout_height="70dp"
-        app:srcCompat="@drawable/phonestatus"
+        android:layout_height="50dp"
+        android:src="@drawable/phonestatus"
         android:layout_below="@+id/tv_f3_recorderstatus_desc"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="80dp"
@@ -86,7 +67,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="70dp"
-        app:srcCompat="@drawable/beaconstatus"
+        android:src="@drawable/beaconstatus"
         android:layout_below="@+id/iv_f3_phonerecord"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="80dp"
@@ -116,7 +97,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="70dp"
-        app:srcCompat="@drawable/bandstatus"
+        android:src="@drawable/bandstatus"
         android:layout_below="@+id/iv_f3_beaconstatus"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="80dp"
@@ -146,7 +127,7 @@
     <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:srcCompat="@drawable/folder"
+        android:src="@drawable/folder"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:id="@+id/ib_openFolder"

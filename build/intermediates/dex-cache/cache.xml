@@ -30,24 +30,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.1.0_1f5599e9423a0487b08dd15c723bddf5cd55d6b3\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.1.0_07f7207956a0dba545d32ee132418fed34096558\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ApplicationTabbedModel\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -72,6 +54,24 @@
         revision="25.0.2"
         sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
         <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecTesi\Activity_Recognition\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.1.0_807c02156184f5ef850b34f4fa97ef07f79c886a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\cekke\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.1\support-annotations-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.1.1_07fc2598493dd02c70e8c3cc08f7b3beec4e619a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="d1b4c7f9b6ead72278c91dfe17602536aed2feea">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -111,15 +111,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\design\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-25.1.0_c2f404428c809c320f348f16a740560636e38494\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
@@ -138,48 +129,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_8cfd580b407953000220445782ce86f1d652067d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecTesi\Activity_Recognition\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
         <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecTesi\Activity_Recognition\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_efdf8080dc24b3b8e13b321fdc355a010960abf9\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.1.0_94e71a9f7efc51600a546b85018061f73d733984\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="aee64634871d88a419d59eb743c1258a60f19700">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.1.0_47bbfcf7ceb97ea7f280a7346403e383b27325d0\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-25.1.0_804b675a1b389ae2d4887c6c5661f5b08d4b7ca7\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -192,12 +147,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.1.0\jars\classes.jar"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\libs\internal_impl-23.1.1.jar"
         jumboMode="true"
         optimize="true"
-        revision="25.0.2"
-        sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.1.0_fc11506322dfc15513adaf3efa1e72b966027503\classes.dex" />
+        revision="23.0.2"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.1.1_36fb76841b5d3581971eb14dcbc8c38f9b285ac4\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -246,15 +201,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_7124a5a2b5e259edf52ba93b4def9cf25eb4f537\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecTesi\Activity_Recognition\app\build\intermediates\exploded-aar\com.android.support\transition\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -273,12 +219,30 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.1.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-23.1.1_829acdd5d0e9f7f7a29ee17a9faff4656a5f4034\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ApplicationTabbedModel\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="aee64634871d88a419d59eb743c1258a60f19700">
         <dex dex="C:\Users\cekke\AndroidStudioProjects\ApplicationTabbedModel\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.1.0_45d8603ce836767098e5d522f1446d28e3f4d843\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.1.1_49bb4b47335aa932b951923bb851acd2a6ead6c9\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -291,12 +255,21 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\transition\25.1.0\jars\classes.jar"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
-        revision="25.0.2"
-        sha1="d38084015027549951cbaea5d5f6fb795cc81151">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-transition-25.1.0_7848ce1f06b2f7d18ce13133276c3ccb55b2ef4a\classes.dex" />
+        revision="23.0.2"
+        sha1="200e158dd8de7058abd1dc0acd76aa65cb96ae9f">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_13b4e2677199aa54339760a45e7b6abd81b8a85e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\design\23.1.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.1.1_dac94f23c282f8c01c057967f0fe4729de1d48fc\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -345,6 +318,15 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-23.1.1_fbe51cc5b1762746a91cedd54796ba13328421c4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecTesi\Activity_Recognition\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -354,21 +336,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.1.0\jars\classes.jar"
+        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="25.0.2"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.1.0_80b8b177b5330a036361be20ab267a45f959ccb7\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
-        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-25.1.0_e38be5c3eda9a537bcb1bd6de8f3032e7312f1b6\classes.dex" />
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.1.1_a8a043a1d33199b1a12d029706f0767224e5d1c1\classes.dex" />
     </item>
     <item
         is-multidex="true"

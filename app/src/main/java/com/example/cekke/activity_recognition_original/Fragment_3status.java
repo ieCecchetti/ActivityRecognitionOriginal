@@ -5,10 +5,7 @@ package com.example.cekke.activity_recognition_original;
  */
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +14,13 @@ import android.widget.TextView;
 
 public class Fragment_3status extends Fragment {
 
-    private static TextView tvPhoneStatus, tvBeaconStatus, tvBandStatus, tvRecordTime;
-    private String TimeRecording;
+    private static TextView tvPhoneStatus, tvBeaconStatus, tvBandStatus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_3status, container, false);
 
-        tvRecordTime = (TextView) rootView.findViewById(R.id.tv_f3_recordtime);
         tvPhoneStatus = (TextView) rootView.findViewById(R.id.tv_f3_phonerecorder_value);
         tvBeaconStatus = (TextView) rootView.findViewById(R.id.tv_f3_beaconrecorder_value);
         tvBandStatus = (TextView) rootView.findViewById(R.id.tv_f3_bandrecorder_value);
@@ -61,17 +56,6 @@ public class Fragment_3status extends Fragment {
             tvBeaconStatus.setText("Not Recording");
         }
     }
-
-    public static String getRecordTime()
-    {
-        return tvRecordTime.getText().toString();
-    }
-
-    public static void setRecordTime(String Time)
-    {
-        tvRecordTime.setText(Time);
-    }
-
 
 
 }
