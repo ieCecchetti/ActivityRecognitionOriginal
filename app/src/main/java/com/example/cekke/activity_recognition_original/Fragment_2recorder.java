@@ -6,10 +6,8 @@ package com.example.cekke.activity_recognition_original;
 
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +16,8 @@ import android.widget.TextView;
 
 public class Fragment_2recorder extends Fragment {
 
-    private TextView feature1, feature2, feature3, feature4, feature5;
-    private TextView activityTextView;
+    private static TextView feature1, feature2, feature3, feature4, feature5;
+    private static TextView activityTextView;
     private static TextView tvRecordTime;
 
 
@@ -46,24 +44,16 @@ public class Fragment_2recorder extends Fragment {
             @Override
             public void onClick(View view) {
                 //create looper for check status and generate start allarm...
+                MainActivity.nRip=0;
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
                 MainActivity.creatorStatusLooper();
                 MainActivity.startRepeatingTask();
+                if (MainActivity.initNewSession()) {
+                    MainActivity.startBandRecording();
+                }
+                MainActivity.activityLoop();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // Start Recording after 6 seconds (waiting for clean data)
-                        MainActivity.contData=0;
-                        MainActivity.folder=MainActivity.getStandardFolderName().replace("data", MainActivity.getDate());
-                        MainActivity.started = true;
-
-                        if (MainActivity.initNewSession()) {
-                            MainActivity.startBandRecording();
-                        }
-                    }
-                }, 6000);
             }
         });
 
@@ -72,18 +62,7 @@ public class Fragment_2recorder extends Fragment {
 
             @Override
             public void onClick(View view) {
-                String Xstring="";
-                String Ystring="";
-                String Zstring="";
-                for (int i=0;i<100;i++){
-                    Xstring+= MainActivity.valueListX[i] + " ," ;
-                    Ystring+= MainActivity.valueListY[i] + " ," ;
-                    Zstring+= MainActivity.valueListZ[i] + " ," ;
-                }
-
-                Log.i("X", Xstring);
-                Log.i("Y", Ystring);
-                Log.i("Z", Zstring);
+                MainActivity.staticCalculatorObj.printArrays();
             }
         });
 
@@ -92,14 +71,14 @@ public class Fragment_2recorder extends Fragment {
 
 
 
-    public void getDataFromMainClass()
+    public static void setDataFromMainClass(String StdDevX, String XmeansModule, String YmeansModule, String ZmeansModule, String StdDevXYZ, String seconlayer )
     {
-        feature1.setText(String.valueOf(MainActivity.stdDevX));
-        feature2.setText(String.valueOf(MainActivity.XmeansModule));
-        feature3.setText(String.valueOf(MainActivity.YmeansModule));
-        feature4.setText(String.valueOf(MainActivity.ZmeansModule));
-        feature5.setText(String.valueOf(MainActivity.stdDevXYZ));
-        activityTextView.setText(MainActivity.currentActivity);
+        feature1.setText(StdDevX);
+        feature2.setText(XmeansModule);
+        feature3.setText(YmeansModule);
+        feature4.setText(ZmeansModule);
+        feature5.setText(StdDevXYZ);
+        activityTextView.setText(seconlayer);
     }
 
     public static String getRecordTime()

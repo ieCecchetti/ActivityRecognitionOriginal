@@ -30,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
@@ -90,24 +89,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Fragment_2recorder fragRecorder= new Fragment_2recorder();
     private Fragment_3status fragStatus= new Fragment_3status();
     private Fragment_4show fragShow= new Fragment_4show();
+    public static Utils projectUtils= new Utils();
+    public static ActivityRecStaticPart staticCalculatorObj= new ActivityRecStaticPart();
 
     //-----------------------------------------------------------global variables
     private Sensor accellerometer;
     private Sensor gyroscope;
     private SensorManager SM;
     private SensorManager SM1;
-    public static double[] valueListX = new double[100];
-    public static double[] valueListY = new double[100];
-    public static double[] valueListZ = new double[100];
-    public static boolean started=false;
-    public static int contData=0;
-    public static double stdDevX;
-    public static double XmeansModule;
-    public static double YmeansModule;
-    public static double ZmeansModule;
-    public static double stdDevXYZ;
-    public static String currentActivity="Activity : None";
     private boolean exit=false;
+    public static String firstLayer;
+    public static String secondLayer;
+    public static int nRip=0;
 
     //-----------------------------------------------------------band variables
 
@@ -148,7 +141,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static boolean bandStatus=false;
     public static boolean beaconStatus=false;
     public static int m_interval = 1000; // 1 seconds by default, can be changed later
+    public static int m_intervalAL = 120; //activity looper
     public static Handler m_handler;
+    public static Handler m_handlerActivity;
     private static BandClient client = null;
 
     //-----------------------------------------------------------define the starting folder
@@ -217,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SM=(SensorManager)getSystemService(SENSOR_SERVICE);
         accellerometer= SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_NORMAL); //0ms
-        SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_GAME); //20ms
+        SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_GAME); //20ms ->50data per second
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
         SM1=(SensorManager)getSystemService(SENSOR_SERVICE);
@@ -401,33 +396,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        int eType = event.sensor.getType();
-
-        if(started && (eType == Sensor.TYPE_ACCELEROMETER))
+        if (staticCalculatorObj.isStarted())
         {
-            if(contData!=99){
-                contData++;
-
-                valueListX[contData]=(event.values[0]);
-                valueListY[contData]=(event.values[1]);
-                valueListZ[contData]=(event.values[2]);
-                savePhoneSens(event);
-
-
-            }else{
-                contData=0;
-                started=false;
-                stopRepeatingTask();
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
-                processData();
-                fragRecorder.getDataFromMainClass();
-            }
-
-
-
+            phoneStatus=staticCalculatorObj.addPhoneData(event);
+            savePhoneSens(event);
         }
+        if(staticCalculatorObj.isReadyFL())
+        {
+            firstLayer=staticCalculatorObj.getFirstLayerActivity();
+        }
+        if(staticCalculatorObj.isReadySL())
+        {
+            secondLayer=staticCalculatorObj.getSecondLayerActivity();
+            stopRepeatingTask();
+        }
+
     }
 
 
@@ -472,112 +455,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         nm.notify(uniqueId, notification.build());
     }
 
-    private void processData(){
-        filterData();
-        double Xmeans=MathUtils.arithmicMean(valueListX);
-        double Ymeans=MathUtils.arithmicMean(valueListY);
-        double Zmeans= MathUtils.arithmicMean(valueListZ);
-
-        stdDevX= Math.sqrt(variance(valueListX,Xmeans,100));
-        //feature1.setText(String.valueOf(stdDevX));
-
-        XmeansModule=Math.abs(Xmeans);
-        //feature2.setText(String.valueOf(XmeansModule));
-        YmeansModule=Math.abs(Ymeans);
-        //feature3.setText(String.valueOf(YmeansModule));
-        ZmeansModule=Math.abs(Zmeans);
-        //feature4.setText(String.valueOf(ZmeansModule));
-
-        stdDevXYZ = Math.sqrt(variance(valueListX,Xmeans,100)+
-                variance(valueListY,Ymeans,100)+
-                variance(valueListZ,Zmeans,100));
-        //feature5.setText(String.valueOf(stdDevXYZ));
-
-
-
-        //posizione?
-        if (YmeansModule>8.8)
-        {
-            //posizione eretta
-            if(stdDevXYZ>1.2  && stdDevX>0.7)
-            {
-                //walking
-                currentActivity="Activity : WALKING";
-            }else{
-                currentActivity="Activity : STANDING";
-            }
-        }else{
-            //sitting
-            if ((XmeansModule>1.3) || (stdDevX)>0.32) //se la stdDev è alta solitamente siamo in sitting
-            {
-                if(stdDevX<0.1) // se stdDev<0.1 si raggiunge solitamente solo da lying
-                {
-                    //caso limite
-                    currentActivity="Activity : LYING";
-
-                }else{
-                    currentActivity="Activity : SITTING";
-                }
-
-            }
-            else{
-                currentActivity="Activity : LYING";
-            }
-            //lying sul lato
-            if (ZmeansModule<8.5){
-                if(Ymeans>1)
-                {
-                    currentActivity="Activity : SITTING";
-                }else{
-                    currentActivity="Activity : LYING";
-                }
-            }
-        }
-
-
-
-    }
-
-    private void filterData(){
-        Double sumX;
-        Double sumY;
-        Double sumZ;
-        for (int i=4;i<96;i++)
-        {
-            sumX=valueListX[i-2];
-            sumX+=valueListX[i-1];
-            sumX+=valueListX[i];
-            sumX+=valueListX[i+1];
-            sumX+=valueListX[i+2];
-
-            sumY=valueListY[i-2];
-            sumY+=valueListY[i-1];
-            sumY+=valueListY[i];
-            sumY+=valueListY[i+1];
-            sumY+=valueListY[i+2];
-
-            sumZ=valueListZ[i-2];
-            sumZ+=valueListZ[i-1];
-            sumZ+=valueListZ[i];
-            sumZ+=valueListZ[i+1];
-            sumZ+=valueListZ[i+2];
-        }
-
-    }
-
-    private double variance(double[] array,double mean, int nElem)
-    {
-        double discrepancy=0;
-        double sum=0;
-
-        for (int i=0; i<nElem;i++)
-        {
-            discrepancy=0;
-            discrepancy= array[i]-mean;
-            sum+= (discrepancy*discrepancy);
-        }
-        return sum/(100-1);
-    }
 
     public static String getDate(){
         DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -650,27 +527,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return true;
     }
 
-    private static String TimeIncr(String Time)
-    {
-        String[] separated = Time.split(":");
-        int min = Integer.parseInt(separated[0]);
-        int sec = Integer.parseInt(separated[1].split(" ")[0]);
-        sec++;
-        if(sec==60)
-        {
-            sec=0;
-            min++;
-        }
-        String newTime=min+":"+sec+" min";
-        return newTime;
-    }
-
     static Runnable m_statusChecker = new Runnable()
     {
         @Override
         public void run() {
             String substr=Fragment_2recorder.getRecordTime().substring(0,4);
-            Fragment_2recorder.setRecordTime(TimeIncr(substr));
+            Fragment_2recorder.setRecordTime(Utils.TimeIncr(substr));
             Fragment_3status.printListenerStatus();
             refreshListenerStatus(); //this function can change value of m_interval.
             m_handler.postDelayed(m_statusChecker, m_interval);
@@ -682,26 +544,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         m_statusChecker.run();
     }
 
-    public void stopRepeatingTask()
+    public static void stopRepeatingTask()
     {
         m_handler.removeCallbacks(m_statusChecker);
     }
+
+
 
     public static void creatorStatusLooper()
     {
         //DEFINING THE TREAD FOR CHECKING DEVICE STATUS
         m_handler = new Handler();
+        m_handlerActivity= new Handler();
     }
 
     public static void refreshListenerStatus(){
-        bandStatus= checkAllStatus();
+        //bandStatus= checkAllBandStatus();
         phoneStatus=false;
         bandStatus=false;
         beaconStatus=false;
         resetAllStatus();
     }
 
-    public static boolean checkAllStatus()
+    public static boolean checkAllBandStatus()
     {
         Log.i("CHECK",stateHros+"+"+stateRRos+"+"+stateSTos+"+"+stateAccos+"+"+stateGSRos+"+"+stateGyros);
         return stateHros&&stateRRos&&stateSTos&&stateAccos&&stateGSRos&&stateGyros;
@@ -717,13 +582,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void savePhoneSens(SensorEvent event)
     {
-        String tipo = null;
-        String sensType = null;
         String dati = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
-            tipo = event.sensor.getStringType();
-        }
-        if (tipo.equals("android.sensor.accelerometer")) {
+        String sensType="sensor";
+        int eType = event.sensor.getType();
+        if (eType == Sensor.TYPE_ACCELEROMETER) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
             Calendar c = Calendar.getInstance();
             dati = String.valueOf(event.values[0]) +
@@ -731,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     " " + String.valueOf(event.values[2]) +
                     " " + sdf.format(c.getTime()) + ";\n";
             sensType = "Accelerometer";
-        } else if (tipo.equals("android.sensor.gyroscope")) {
+        } else if (eType == Sensor.TYPE_GYROSCOPE) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
             Calendar c = Calendar.getInstance();
             dati = String.valueOf(event.values[0]) +
@@ -776,13 +638,50 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public static void activityLoop()
+    {
+        if(nRip!=5)
+        {
+            Handler PhoneBandWindow = new Handler();
+            PhoneBandWindow.postDelayed(new Runnable() {
+                public void run() {
+                    // Start Recording after 4 seconds (waiting for clean data)
+                    //record band and phone for the first layer of activity
+                    staticCalculatorObj.flushFLData();
+                    staticCalculatorObj.flushSLData();
+                    folder=getStandardFolderName().replace("data", getDate());
+                    staticCalculatorObj.StartRecFirstLayer();
+                    staticCalculatorObj.StartRecSecondLayer();
+                }
+            }, 4000);
+            Handler BandWindow = new Handler();
+            BandWindow.postDelayed(new Runnable() {
+                public void run() {
+                    // Start Recording for the second layer
+                    Fragment_2recorder.setDataFromMainClass(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
+                            String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), staticCalculatorObj.getSecondLayerActivity());
+                    staticCalculatorObj.StopRecSecondLayer();
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
+                    projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+", "));
+                    activityLoop();
+                }
+            }, 10000);
+            nRip++;
+        }else{
+            MainActivity.stopRepeatingTask();
+        }
+
+    }
+
 
     //---------------------------------------------------------------------------------------------// band procedure
 
     private static BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
         @Override
         public void onBandGsrChanged(BandGsrEvent event) {
-            if ((event != null)&&started) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getResistance()+" "+sdf.format(c.getTime())+";\n\r");
@@ -799,7 +698,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandRRIntervalEventListener mRRIntervalEventListener = new BandRRIntervalEventListener() {
         @Override
         public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
-            if ((event != null)&&started) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getInterval()+" "+sdf.format(c.getTime())+";\n\r");
@@ -816,7 +715,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandSkinTemperatureEventListener mSkinTemperatureEventListener = new BandSkinTemperatureEventListener() {
         @Override
         public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent bandSkinTemperatureEvent) {
-            if ((bandSkinTemperatureEvent != null)&&started) {
+            if ((bandSkinTemperatureEvent != null)&&staticCalculatorObj.isStartedSLayer()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(bandSkinTemperatureEvent.getTemperature()+" "+sdf.format(c.getTime())+";\n\r");
@@ -832,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandAccelerometerEventListener accelerometerEventListener = new BandAccelerometerEventListener() {
         @Override
         public void onBandAccelerometerChanged(BandAccelerometerEvent bandAccelerometerEvent) {
-            if((bandAccelerometerEvent != null)&&started){
+            if((bandAccelerometerEvent != null)&&staticCalculatorObj.isStartedSLayer()){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8)+" "+
@@ -845,6 +744,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } catch (IOException e) {
                     Log.i("bandError","Attenzione:scrittura fallita (Acc)");
                 }
+
+                staticCalculatorObj.addBandData(bandAccelerometerEvent);
             }
         }
 
@@ -854,7 +755,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onBandGyroscopeChanged(BandGyroscopeEvent bandGyroscopeEvent) {
 
-            if((gyroscopeEventListener!= null)&&started){
+            if((gyroscopeEventListener!= null)&&staticCalculatorObj.isStartedSLayer()){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandGyroscopeEvent.getAngularVelocityX())+" "+
@@ -874,7 +775,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
-            if ((event != null)&&started) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getHeartRate()+" "+sdf.format(c.getTime())+";\n\r");
@@ -1165,7 +1066,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if ((beacons.size() > 0)&&started) {
+                if ((beacons.size() > 0)&&staticCalculatorObj.isStarted()) {
                     //stamp for the number of beacons in region
                     beaconStatus = true;
                     for (Beacon beacon : beacons) {
