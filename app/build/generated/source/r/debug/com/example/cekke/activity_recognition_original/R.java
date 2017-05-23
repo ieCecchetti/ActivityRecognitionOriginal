@@ -2322,20 +2322,10 @@ containing a value of this type.
         public static final int ic_info_black_24dp=0x7f02004e;
         public static final int ic_notifications_black_24dp=0x7f02004f;
         public static final int ic_sync_black_24dp=0x7f020050;
-        public static final int loaddatase=0x7f020051;
-        public static final int logo=0x7f020052;
-        public static final int logoapp=0x7f020053;
-        public static final int method=0x7f020054;
-        public static final int notification_template_icon_bg=0x7f02005e;
-        public static final int ok=0x7f020055;
-        public static final int pause=0x7f020056;
-        public static final int phonestatus=0x7f020057;
-        public static final int play=0x7f020058;
-        public static final int printfile=0x7f020059;
-        public static final int qualcosa=0x7f02005a;
-        public static final int recognition=0x7f02005b;
-        public static final int stop_button=0x7f02005c;
-        public static final int stopses=0x7f02005d;
+        public static final int notification_template_icon_bg=0x7f020054;
+        public static final int phonestatus=0x7f020051;
+        public static final int play=0x7f020052;
+        public static final int printfile=0x7f020053;
     }
     public static final class id {
         public static final int MyAppbar=0x7f0d007a;
@@ -2402,7 +2392,7 @@ containing a value of this type.
         public static final int fixed=0x7f0d0037;
         public static final int home=0x7f0d0004;
         public static final int homeAsUp=0x7f0d000f;
-        public static final int ib_openFolder=0x7f0d009d;
+        public static final int ib_folder=0x7f0d009d;
         public static final int ib_printvett=0x7f0d0090;
         public static final int ib_startRec=0x7f0d0081;
         public static final int icon=0x7f0d0042;

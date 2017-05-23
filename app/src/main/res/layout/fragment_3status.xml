@@ -33,7 +33,7 @@
 
     <ImageView
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:src="@drawable/phonestatus"
         android:layout_below="@+id/tv_f3_recorderstatus_desc"
         android:layout_marginTop="10dp"
@@ -122,14 +122,14 @@
         android:textColor="@color/colorError"/>
 
     <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/folder"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/ib_openFolder"
+        android:id="@+id/ib_folder"
         android:scaleType="fitXY"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:layout_alignParentBottom="true"/>
+
 
 
 </RelativeLayout>

@@ -47,6 +47,7 @@ public class Fragment_2recorder extends Fragment {
                 MainActivity.nRip=0;
                 ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                 toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                MainActivity.folder=MainActivity.getStandardFolderName().replace("data", MainActivity.projectUtils.getDate());
                 MainActivity.creatorStatusLooper();
                 MainActivity.startRepeatingTask();
                 if (MainActivity.initNewSession()) {

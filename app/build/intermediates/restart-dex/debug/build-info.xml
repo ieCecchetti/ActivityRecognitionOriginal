@@ -5,22 +5,22 @@
     density="xxhdpi"
     format="8"
     plugin-version="2.2.3"
-    timestamp="440082771760807"
+    timestamp="446299220877211"
     token="-6366606532347606789"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="683" />
+        duration="362" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="79" />
+        duration="8" />
     <task
         name="verifier"
-        duration="24" />
+        duration="1" />
 
     <artifact
         location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
@@ -34,7 +34,20 @@
             type="MAIN" />
     </build>
     <build
-        timestamp="440082771760807"
+        timestamp="445971620877527"
+        verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\instant-run-resources\resources-debug.ir.ap_"
+            type="RESOURCES" />
+        <artifact
+            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+            type="DEX" />
+    </build>
+    <build
+        timestamp="446299220877211"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"

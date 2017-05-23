@@ -37,6 +37,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    private static boolean phoneRec, beaconsRec, bandRec;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -212,18 +213,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onStop();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean phoneRec=prefs.getBoolean("example_switch_phone",true);
-        boolean beaconsRec=prefs.getBoolean("example_switch_beacons",true);
-        boolean bandRec=prefs.getBoolean("example_switch_band",true);
+        phoneRec=prefs.getBoolean("example_switch_phone",true);
+        beaconsRec=prefs.getBoolean("example_switch_beacons",true);
+        bandRec=prefs.getBoolean("example_switch_band",true);
         String fname=prefs.getString("example_text","ActivityRec_data");
 
         MainActivity.getRecordersFromSettings(phoneRec,beaconsRec,bandRec);
         MainActivity.setStandardFolderName(fname);
 
-
-
         return;
-
     }
 
 

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -192,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         //settings reset code
         //PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        phoneRec=prefs.getBoolean("example_switch_phone",true);
+        beaconRec=prefs.getBoolean("example_switch_beacons",true);
+        bandRec=prefs.getBoolean("example_switch_band",true);
 
         //notification init code
         notification = new Notification.Builder(this);
@@ -396,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if (staticCalculatorObj.isStarted())
+        if (staticCalculatorObj.isStarted() && phoneRec)
         {
             phoneStatus=staticCalculatorObj.addPhoneData(event);
             savePhoneSens(event);
@@ -456,13 +462,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-    public static String getDate(){
-        DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
-        String date=dfDate.format(Calendar.getInstance().getTime());
-        DateFormat dfTime = new SimpleDateFormat("HH-mm");
-        String time = dfTime.format(Calendar.getInstance().getTime());
-        return date + "_" + time;
-    }
 
     public static boolean initNewSession() {
 
@@ -484,44 +483,47 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
-        file = new File(path+"/"+ folder, folderBand);
+        if(bandRec)
+        {
+            file = new File(path+"/"+ folder, folderBand);
 
-        if (!file.exists()) {
-            try {
-                file.mkdir();
-            } catch (SecurityException e) {
+            if (!file.exists()) {
+                try {
+                    file.mkdir();
+                } catch (SecurityException e) {
+                }
             }
-        }
 
-        HRlog = new File(file,"HRlog.txt");
-        GSRlog = new File(file,"GSRlog.txt");
-        RRlog = new File(file,"RRlog.txt");
-        STlog = new File(file,"STlog.txt");
-        Acclog = new File(file,"Acclog.txt");
-        Gyrolog = new File(file,"Gyrolog.txt");
-
+            HRlog = new File(file,"HRlog.txt");
+            GSRlog = new File(file,"GSRlog.txt");
+            RRlog = new File(file,"RRlog.txt");
+            STlog = new File(file,"STlog.txt");
+            Acclog = new File(file,"Acclog.txt");
+            Gyrolog = new File(file,"Gyrolog.txt");
 
 
-        try {
-            HRlog.createNewFile();
-            GSRlog.createNewFile();
-            RRlog.createNewFile();
-            STlog.createNewFile();
-            Acclog.createNewFile();
-            Gyrolog.createNewFile();
-        } catch (IOException e) {
-            Log.d("App",String.format("Errore: "+e));
-        }
-        try {
-            HRos = new FileOutputStream(HRlog);
-            GSRos = new FileOutputStream(GSRlog);
-            RRos = new FileOutputStream(RRlog);
-            STos = new FileOutputStream(STlog);
-            Accos = new FileOutputStream(Acclog);
-            Gyros = new FileOutputStream(Gyrolog);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+
+            try {
+                HRlog.createNewFile();
+                GSRlog.createNewFile();
+                RRlog.createNewFile();
+                STlog.createNewFile();
+                Acclog.createNewFile();
+                Gyrolog.createNewFile();
+            } catch (IOException e) {
+                Log.d("App",String.format("Errore: "+e));
+            }
+            try {
+                HRos = new FileOutputStream(HRlog);
+                GSRos = new FileOutputStream(GSRlog);
+                RRos = new FileOutputStream(RRlog);
+                STos = new FileOutputStream(STlog);
+                Accos = new FileOutputStream(Acclog);
+                Gyros = new FileOutputStream(Gyrolog);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
         return true;
@@ -649,7 +651,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     //record band and phone for the first layer of activity
                     staticCalculatorObj.flushFLData();
                     staticCalculatorObj.flushSLData();
-                    folder=getStandardFolderName().replace("data", getDate());
                     staticCalculatorObj.StartRecFirstLayer();
                     staticCalculatorObj.StartRecSecondLayer();
                 }
@@ -664,7 +665,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                     toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
                     toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
-                    projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+", "));
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
+                    Calendar c = Calendar.getInstance();
+                    projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+" "+sdf.format(c.getTime()) + ";\n"));
                     activityLoop();
                 }
             }, 10000);
@@ -681,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
         @Override
         public void onBandGsrChanged(BandGsrEvent event) {
-            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getResistance()+" "+sdf.format(c.getTime())+";\n\r");
@@ -698,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandRRIntervalEventListener mRRIntervalEventListener = new BandRRIntervalEventListener() {
         @Override
         public void onBandRRIntervalChanged(final BandRRIntervalEvent event) {
-            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getInterval()+" "+sdf.format(c.getTime())+";\n\r");
@@ -715,7 +719,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandSkinTemperatureEventListener mSkinTemperatureEventListener = new BandSkinTemperatureEventListener() {
         @Override
         public void onBandSkinTemperatureChanged(BandSkinTemperatureEvent bandSkinTemperatureEvent) {
-            if ((bandSkinTemperatureEvent != null)&&staticCalculatorObj.isStartedSLayer()) {
+            if ((bandSkinTemperatureEvent != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(bandSkinTemperatureEvent.getTemperature()+" "+sdf.format(c.getTime())+";\n\r");
@@ -731,7 +735,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandAccelerometerEventListener accelerometerEventListener = new BandAccelerometerEventListener() {
         @Override
         public void onBandAccelerometerChanged(BandAccelerometerEvent bandAccelerometerEvent) {
-            if((bandAccelerometerEvent != null)&&staticCalculatorObj.isStartedSLayer()){
+            if((bandAccelerometerEvent != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8)+" "+
@@ -755,7 +759,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onBandGyroscopeChanged(BandGyroscopeEvent bandGyroscopeEvent) {
 
-            if((gyroscopeEventListener!= null)&&staticCalculatorObj.isStartedSLayer()){
+            if((gyroscopeEventListener!= null)&&staticCalculatorObj.isStartedSLayer()&& bandRec){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandGyroscopeEvent.getAngularVelocityX())+" "+
@@ -775,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
-            if ((event != null)&&staticCalculatorObj.isStartedSLayer()) {
+            if ((event != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.format(event.getHeartRate()+" "+sdf.format(c.getTime())+";\n\r");
@@ -1066,7 +1070,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if ((beacons.size() > 0)&&staticCalculatorObj.isStarted()) {
+                if ((beacons.size() > 0)&&staticCalculatorObj.isStarted() && beaconRec) {
                     //stamp for the number of beacons in region
                     beaconStatus = true;
                     for (Beacon beacon : beacons) {
