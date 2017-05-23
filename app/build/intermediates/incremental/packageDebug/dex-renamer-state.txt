@@ -1,4 +1,4 @@
-#Mon May 22 23:03:26 CEST 2017
+#Tue May 23 15:01:46 CEST 2017
 base.0=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5
 renamed.1=classes2.dex
 renamed.0=classes.dex
