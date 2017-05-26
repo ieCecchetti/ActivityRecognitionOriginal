@@ -42,8 +42,8 @@ public class Fragment_3status extends Fragment {
         return rootView;
     }
 
-    public static void printListenerStatus(){
-        if (MainActivity.phoneStatus)
+    public static void printListenerStatus(boolean phone, boolean beacon, boolean band){
+        if (phone)
         {
             tvPhoneStatus.setTextColor(Color.GREEN);
             tvPhoneStatus.setText("Recording");
@@ -52,7 +52,7 @@ public class Fragment_3status extends Fragment {
             tvPhoneStatus.setText("Not Recording");
         }
 
-        if (MainActivity.bandStatus)
+        if (band)
         {
             tvBandStatus.setTextColor(Color.GREEN);
             tvBandStatus.setText("Recording");
@@ -61,7 +61,7 @@ public class Fragment_3status extends Fragment {
             tvBandStatus.setText("Not Recording");
         }
 
-        if (MainActivity.beaconStatus)
+        if (beacon)
         {
             tvBeaconStatus.setTextColor(Color.GREEN);
             tvBeaconStatus.setText("Recording");

@@ -70,7 +70,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="d1b4c7f9b6ead72278c91dfe17602536aed2feea">
+        sha1="c71f0b012a33d98d1279aba1150a0508d659290e">
         <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5\classes.dex" />
     </item>
     <item
@@ -259,7 +259,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="200e158dd8de7058abd1dc0acd76aa65cb96ae9f">
+        sha1="4c94dd43afcc01ac56a6857f5c917ca9339b5c33">
         <dex dex="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_13b4e2677199aa54339760a45e7b6abd81b8a85e\classes.dex" />
     </item>
     <item

@@ -68,8 +68,10 @@ import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -103,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static String firstLayer;
     public static String secondLayer;
     public static int nRip=0;
+    public static int maxRip=6;
+    private static List<String> activityList;
+    private static List<String> dateList;
+
+    private static Context context;
+    private static Activity activity;
 
     //-----------------------------------------------------------band variables
 
@@ -121,13 +129,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static File Acclog;
     public static File Gyrolog;
 
-    public static Context mContext;
-
     //-----------------------------------------------------------beacons variables
     protected final String TAG = "RangingActivity";
-    private String actualBeacon="";
     private BeaconManager beaconManager;
     private String beaconsDesc;
+    public static String NearestBeaconId="";
+    public static double NearestBeaconDistance=5.0;
 
     //-----------------------------------------------------------folder and general path
     public static String appFolder="ActivityRecognitionOfficial";
@@ -138,14 +145,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static final String folderPhoneData="Phone";
 
     //-----------------------------------------------------------define the time for checking devices
-    private long lastCheck;
     public static boolean phoneStatus=false;
     public static boolean bandStatus=false;
     public static boolean beaconStatus=false;
     public static int m_interval = 1000; // 1 seconds by default, can be changed later
-    public static int m_intervalAL = 120; //activity looper
     public static Handler m_handler;
-    public static Handler m_handlerActivity;
     private static BandClient client = null;
 
     //-----------------------------------------------------------define the starting folder
@@ -163,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static boolean stateGyros;
     private static boolean stateTaccos;
     private static boolean checker;
+
+
 
 
 
@@ -188,10 +194,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         setContentView(R.layout.activity_main);
 
-        //final Toolbar toolbar= (Toolbar) findViewById(R.id.MyToolbar);
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        MainActivity.context= getApplicationContext();
+        activity= this;
         //settings reset code
         //PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -228,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_UI); //60ms
         //SM.registerListener(this, accellerometer,SensorManager.SENSOR_DELAY_FASTEST); //200ms
 
+        activityList= new ArrayList<String>();
+        dateList= new ArrayList<String>();
+
 
         //--------------------------------------------------------------------------BEACONS SETTINGS
         beaconManager = BeaconManager.getInstanceForApplication(this);
@@ -261,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-
+        startBandRecording();
 
     }
 
@@ -314,12 +321,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         nm.cancel(uniqueId);
         super.onDestroy();
     }
-
-    public static Context getContext() {
-        return mContext;
-    }
-
-    public static Activity getActivity(){return getActivity();}
 
     final WeakReference<Activity> reference = new WeakReference<Activity>(this);
 
@@ -414,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if(staticCalculatorObj.isReadySL())
         {
             secondLayer=staticCalculatorObj.getSecondLayerActivity();
-            stopRepeatingTask();
+            //stopRepeatingTask();
         }
 
     }
@@ -461,10 +462,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         nm.notify(uniqueId, notification.build());
     }
 
+    public static Context getContext(){
+        return MainActivity.context;
+    }
+
+    public static Context getActivity(){
+        return activity;
+    }
+
 
 
     public static boolean initNewSession() {
-
+       if(!projectUtils.checkBluetoothStatus()){
+           Toast.makeText(getContext(),
+                   "Bluetooth disabled, impossible to connect with beacons and band!",Toast.LENGTH_LONG).show();
+       }
+        beaconInit();
         path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
         File file = new File(path, appFolder);
         if (!file.exists()) {
@@ -533,9 +546,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     {
         @Override
         public void run() {
-            String substr=Fragment_2recorder.getRecordTime().substring(0,4);
-            Fragment_2recorder.setRecordTime(Utils.TimeIncr(substr));
-            Fragment_3status.printListenerStatus();
+            String Time = Utils.TimeIncr(staticCalculatorObj.popTime().substring(0,4));
+            staticCalculatorObj.pushTime(Time);
+            Fragment_2recorder.setRecordTime(Time);
+            bandStatus= checkAllBandStatus();
+            beaconStatus= projectUtils.checkBluetoothStatus(); //beacon research start automatically with Bluetooth service start
+            Fragment_3status.printListenerStatus(phoneStatus, beaconStatus, bandStatus);
             refreshListenerStatus(); //this function can change value of m_interval.
             m_handler.postDelayed(m_statusChecker, m_interval);
         }
@@ -549,6 +565,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static void stopRepeatingTask()
     {
         m_handler.removeCallbacks(m_statusChecker);
+        Fragment_2recorder.stopRecord();
     }
 
 
@@ -557,24 +574,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     {
         //DEFINING THE TREAD FOR CHECKING DEVICE STATUS
         m_handler = new Handler();
-        m_handlerActivity= new Handler();
+        staticCalculatorObj.restartTime();
     }
 
     public static void refreshListenerStatus(){
-        //bandStatus= checkAllBandStatus();
         phoneStatus=false;
         bandStatus=false;
         beaconStatus=false;
-        resetAllStatus();
+        resetAllBandStatus();
     }
 
     public static boolean checkAllBandStatus()
     {
-        Log.i("CHECK",stateHros+"+"+stateRRos+"+"+stateSTos+"+"+stateAccos+"+"+stateGSRos+"+"+stateGyros);
-        return stateHros&&stateRRos&&stateSTos&&stateAccos&&stateGSRos&&stateGyros;
+        //Log.i("CHECK",stateHros+"+"+stateRRos+"+"+stateSTos+"+"+stateAccos+"+"+stateGSRos+"+"+stateGyros);
+        //return stateHros&&stateRRos&&stateSTos&&stateAccos&&stateGSRos&&stateGyros;
+        return stateAccos&&stateGyros;
+
     }
 
-    public static void resetAllStatus(){
+    public static void resetAllBandStatus(){
         stateGSRos=false;
         stateAccos=false;
         stateRRos=false;
@@ -640,9 +658,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public static void abortRecording(){
+        staticCalculatorObj.StopRecFirstLayer();
+        staticCalculatorObj.StopRecSecondLayer();
+        nRip=maxRip;
+    }
+
     public static void activityLoop()
     {
-        if(nRip!=5)
+        if(nRip!=maxRip)
         {
             Handler PhoneBandWindow = new Handler();
             PhoneBandWindow.postDelayed(new Runnable() {
@@ -659,6 +683,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             BandWindow.postDelayed(new Runnable() {
                 public void run() {
                     // Start Recording for the second layer
+                    secondLayer = staticCalculatorObj.getSecondLayerActivity();
                     Fragment_2recorder.setDataFromMainClass(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
                             String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), staticCalculatorObj.getSecondLayerActivity());
                     staticCalculatorObj.StopRecSecondLayer();
@@ -669,12 +694,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                     Calendar c = Calendar.getInstance();
                     projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+" "+sdf.format(c.getTime()) + ";\n"));
+                    activityList.add(secondLayer.split(":")[1]);
+                    dateList.add(projectUtils.getDate());
                     activityLoop();
                 }
             }, 10000);
             nRip++;
         }else{
             MainActivity.stopRepeatingTask();
+            staticCalculatorObj.setActivityData(activityList, dateList);
+            //Fragment_4show.printListView(activityList, dateList);
         }
 
     }
@@ -736,6 +765,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onBandAccelerometerChanged(BandAccelerometerEvent bandAccelerometerEvent) {
             if((bandAccelerometerEvent != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec){
+                Log.i("mylog","bandAcc registra" +staticCalculatorObj.isStartedSLayer()+ " e "+ bandRec);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8)+" "+
@@ -776,7 +806,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     };
 
-    private static BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
+    private BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
             if ((event != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec) {
@@ -793,7 +823,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     };
 
-    private static class GsrSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class GsrSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -825,7 +855,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private static class SkinTemperatureSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class SkinTemperatureSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -857,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private static class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class RRIntervalSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -898,7 +928,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private static class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class HeartRateSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -933,7 +963,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             return null;
         }
     }
-    private static class AccelerometerSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class AccelerometerSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -965,7 +995,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private static class GyroscopeSubscriptionTask extends AsyncTask<Void, Void, Void> {
+    private class GyroscopeSubscriptionTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
@@ -997,7 +1027,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private static class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
+    private class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
         @Override
         protected Void doInBackground(WeakReference<Activity>... params) {
             Log.d("Lucia",String.format("Sto chiedendo il consenso"));
@@ -1036,24 +1066,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-
-    private static boolean getConnectedBandClient() throws InterruptedException, BandException {
+    private  boolean getConnectedBandClient() throws InterruptedException, BandException {
         if (client == null) {
             BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
             if (devices.length == 0) {
                 Log.i("bandError","Band isn't paired with your phone.\n");
                 return false;
             }
-            client = BandClientManager.getInstance().create(getContext(), devices[0]);
+            client = BandClientManager.getInstance().create(getBaseContext(), devices[0]);
         } else if (ConnectionState.CONNECTED == client.getConnectionState()) {
             return true;
         }
-
         Log.i("bandError","Band is connecting...\n");
         return ConnectionState.CONNECTED == client.connect().await();
     }
 
-    public static void startBandRecording()
+    public void startBandRecording()
     {
         new HeartRateSubscriptionTask().execute();
         new GsrSubscriptionTask().execute();
@@ -1062,6 +1090,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         new AccelerometerSubscriptionTask().execute();
         new GyroscopeSubscriptionTask().execute();
         //new HeartRateConsentTask().execute(reference);
+        Log.i("mylog","bandTask creati");
     }
 
     @Override
@@ -1073,10 +1102,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if ((beacons.size() > 0)&&staticCalculatorObj.isStarted() && beaconRec) {
                     //stamp for the number of beacons in region
                     beaconStatus = true;
+
                     for (Beacon beacon : beacons) {
                         beaconsDesc = beacon.getId2() +
                                 " " + beacon.getId3() +
                                 " " + beacon.getRssi() + " ";
+
+                        if(NearestBeaconDistance>beacon.getDistance())
+                        {
+                            NearestBeaconDistance=beacon.getDistance();
+                            NearestBeaconId=beacon.getId2().toString();
+                        }
+
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                         Calendar c = Calendar.getInstance();
                         beaconsDesc += sdf.format(c.getTime()) + ";\n";
@@ -1122,5 +1159,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
     }
+
+    public static void printNearestBeacon(){
+        if (!NearestBeaconId.equals(""))
+        {
+            Toast.makeText(getContext(), "Nearest Beacon is :"+NearestBeaconId, Toast.LENGTH_SHORT).show();
+            Log.i("beacon","nearest is "+NearestBeaconId);
+        }
+        Toast.makeText(getContext(), "No beacon altready registered!", Toast.LENGTH_SHORT).show();
+    }
+
+    private static void beaconInit()
+    {
+        NearestBeaconId="";
+        NearestBeaconDistance=10;
+    }
+
+
 
 }

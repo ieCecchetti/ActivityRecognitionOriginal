@@ -1,5 +1,8 @@
 package com.example.cekke.activity_recognition_original;
 
+import android.bluetooth.BluetoothAdapter;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +18,9 @@ import java.util.Calendar;
 
 public final class Utils {
 
+    //remember to insert PERMISSION on manifest before using
+    //<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    //<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     public void saveInFile(String path, String folder, String fileName, String savingText)
     {
         FileOutputStream fileOut=null;
@@ -70,9 +76,27 @@ public final class Utils {
     public static String getDate(){
         DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
         String date=dfDate.format(Calendar.getInstance().getTime());
-        DateFormat dfTime = new SimpleDateFormat("HH-mm");
+        DateFormat dfTime = new SimpleDateFormat("HH:mm:ss");
         String time = dfTime.format(Calendar.getInstance().getTime());
         return date + "_" + time;
+    }
+
+
+    //remember to insert PERMISSION on manifest before using
+    //<uses-permission android:name="android.permission.BLUETOOTH" />
+    public boolean checkBluetoothStatus()
+    {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+            return false;
+        } else {
+            if (!mBluetoothAdapter.isEnabled()) {
+                // Bluetooth is not enable
+                return false;
+            }
+            return true;
+        }
     }
 
 }

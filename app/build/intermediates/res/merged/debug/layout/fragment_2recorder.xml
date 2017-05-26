@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,7 +46,8 @@
         android:layout_height="75dp"
         android:scaleType="fitXY"
         android:layout_below="@+id/tv_customTraining"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginLeft="30dp"
+        android:visibility="visible"/>
 
     <TextView
         android:text="RECORDING TIME"
@@ -183,5 +185,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/printfile" />
+
 
 </RelativeLayout>

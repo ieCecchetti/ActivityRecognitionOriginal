@@ -10,18 +10,22 @@ import com.microsoft.band.sensors.BandAccelerometerEvent;
 
 import net.sf.javaml.utils.MathUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by cekke on 22/05/2017.
  */
 
 public final class ActivityRecStaticPart {
-    private static String activityList;
     private static double[] valueListX = new double[150];
     private static double[] valueListY = new double[150];
     private static double[] valueListZ = new double[150];
     public static double[] valueListXBand = new double[300];
     public static double[] valueListYBand = new double[300];
     public static double[] valueListZBand = new double[300];
+    private static List<String> activityList;
+    private static List<String> dateList;
     private static boolean started=false;
     private static boolean startedSLayer=false;
     private static int contDataPhone=0;
@@ -35,25 +39,12 @@ public final class ActivityRecStaticPart {
     private static String secondLayerActivity="Activity : None";
     private static boolean ReadyFL=false;
     private static boolean ReadySL=false;
+    private static String currentTime;
 
-    public void addActivity(String activity)
+    public ActivityRecStaticPart()
     {
-        activityList+=(activity+" ,");
-    }
-
-    public String getActivityList()
-    {
-        return activityList;
-    }
-
-    public void setActivityList(String activitylist)
-    {
-        activityList=activitylist;
-    }
-
-    public void resetActivityList()
-    {
-        activityList="";
+        activityList= new ArrayList<String>();
+        dateList= new ArrayList<String>();
     }
 
     public boolean addPhoneData(SensorEvent event)
@@ -71,8 +62,6 @@ public final class ActivityRecStaticPart {
                 contDataPhone=0;
                 ReadyFL=true;
                 started=false;
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
             }
         }
         return true;
@@ -140,7 +129,6 @@ public final class ActivityRecStaticPart {
                 variance(valueListY,Ymeans,valueListY.length)+
                 variance(valueListZ,Zmeans,valueListZ.length));
         //feature5.setText(String.valueOf(stdDevXYZ));
-        Log.i("cont", String.valueOf(valueListZ.length));
 
 
 
@@ -355,5 +343,36 @@ public final class ActivityRecStaticPart {
     {
         return stdDevXYZ;
     }
+
+    public  void setActivityData(List<String> vettActivity, List<String> vettData ){
+        activityList.clear();
+        dateList.clear();
+        activityList=vettActivity;
+        dateList=vettData;
+    }
+
+    public List<String> getActivityList(){
+        return activityList;
+    }
+
+    public List<String> getDateList(){
+        return dateList;
+    }
+
+    public void pushTime(String time)
+    {
+        currentTime= time;
+    }
+
+    public String popTime()
+    {
+        return currentTime;
+    }
+
+    public void restartTime()
+    {
+        currentTime= "00:00 min";
+    }
+
 
 }
