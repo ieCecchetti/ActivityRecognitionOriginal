@@ -140,6 +140,10 @@
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable\\abc_seekbar_track_material.xml"
     },
     {
+        "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\stopses.png",
+        "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\src\\main\\res\\drawable\\stopses.png"
+    },
+    {
         "merged": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background_dark.xml",
         "source": "C:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable\\abc_dialog_material_background_dark.xml"
     },

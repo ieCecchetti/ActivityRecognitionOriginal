@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ActivityRecognitionOriginal.iml" filepath="$PROJECT_DIR$/ActivityRecognitionOriginal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JLargeArrays-1.4/JLargeArrays-1.4.iml" filepath="$PROJECT_DIR$/JLargeArrays-1.4/JLargeArrays-1.4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JTransforms-3.1/JTransforms-3.1.iml" filepath="$PROJECT_DIR$/JTransforms-3.1/JTransforms-3.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-beacon-library-2.9/android-beacon-library-2.9.iml" filepath="$PROJECT_DIR$/android-beacon-library-2.9/android-beacon-library-2.9.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaml-0.1.7/javaml-0.1.7.iml" filepath="$PROJECT_DIR$/javaml-0.1.7/javaml-0.1.7.iml" />

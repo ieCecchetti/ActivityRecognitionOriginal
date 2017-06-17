@@ -1,1 +1,1 @@
-include ':app', ':javaml-0.1.7', ':android-beacon-library-2.9', ':microsoft-band-1.3.20307.2'
+include ':app', ':javaml-0.1.7', ':android-beacon-library-2.9', ':microsoft-band-1.3.20307.2', ':JLargeArrays-1.4', ':JTransforms-3.1'

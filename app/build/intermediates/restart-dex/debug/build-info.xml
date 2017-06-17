@@ -5,58 +5,33 @@
     density="xxhdpi"
     format="8"
     plugin-version="2.2.3"
-    timestamp="97602680776960"
+    timestamp="626618151557135"
     token="-6366606532347606789"
-    verifier="COLD_SWAP_REQUESTED" >
+    verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="527" />
+        duration="508" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="35" />
+        duration="7" />
     <task
         name="verifier"
-        duration="14" />
+        duration="1" />
 
     <artifact
-        location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\instant-run-resources\resources-debug.ir.ap_"
-        type="RESOURCES" />
-    <artifact
-        location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
-        type="DEX" />
-    <artifact
-        location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
-        type="DEX" />
-    <artifact
-        location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
-        type="DEX" />
+        location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\outputs\apk\app-debug.apk"
+        type="MAIN" />
 
     <build
-        timestamp="80236751212938"
-        verifier="MANIFEST_FILE_CHANGE" >
+        timestamp="626618151557135"
+        verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\outputs\apk\app-debug.apk"
             type="MAIN" />
-    </build>
-    <build
-        timestamp="97602680776960"
-        verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\instant-run-resources\resources-debug.ir.ap_"
-            type="RESOURCES" />
-        <artifact
-            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
-            type="DEX" />
-        <artifact
-            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
-            type="DEX" />
-        <artifact
-            location="C:\Users\cekke\AndroidStudioProjects\ActivityRecognitionOriginal\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
-            type="DEX" />
     </build>
 
 </instant-run>

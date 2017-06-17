@@ -1,6 +1,7 @@
 package com.example.cekke.activity_recognition_original;
 
 import android.bluetooth.BluetoothAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -97,6 +98,22 @@ public final class Utils {
             }
             return true;
         }
+    }
+
+    /*
+    value: is the value to approximate
+    rate : approximation rate, decimals number after ','
+     */
+    public String round(Double value, int rate){
+        String approx="";
+        try{
+            approx=Double.toString(value).split("\\.")[0];
+            approx+=".";
+            approx+=Double.toString(value).split("\\.")[1].substring(0,rate);
+        }catch (Exception e){
+            Log.i("error","impossible to round!");
+        }
+        return approx;
     }
 
 }

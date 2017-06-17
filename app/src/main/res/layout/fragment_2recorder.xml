@@ -1,14 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.cekke.activity_recognition_original.MainActivity">
-
+    android:orientation="vertical">
     <TextView
         android:text="@string/frame_1_Head"
         android:id="@+id/tv_Head"
@@ -30,6 +27,7 @@
         android:layout_below="@id/tv_intro"
         android:layout_marginTop="20dp"
         android:background="#81d4fa"/>
+
     <TextView
         android:text="Record activity u want to recognise"
         android:layout_width="wrap_content"
@@ -68,102 +66,6 @@
         android:textSize="20dp"
         android:id="@+id/tv_f2_recordtime" />
 
-    <TextView
-        android:text="FEATURES CALCOLATE : "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_features"
-        android:layout_below="@id/ib_startRec"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="10dp"/>
-
-    <TextView
-        android:text="DEV.STD(X) : "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature1Text"
-        android:layout_below="@id/tv_features"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"/>
-
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature1"
-        android:layout_alignBaseline="@+id/tv_feature1Text"
-        android:layout_alignStart="@id/tv_feature1Text"
-        android:layout_marginLeft="160dp"/>
-
-    <TextView
-        android:text="ABS(X) :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature2Text"
-        android:layout_below="@+id/tv_feature1Text"
-        android:layout_alignStart="@+id/tv_feature1Text"
-        android:layout_marginTop="10dp" />
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature2"
-        android:layout_alignBaseline="@+id/tv_feature2Text"
-        android:layout_alignStart="@id/tv_feature2Text"
-        android:layout_marginLeft="160dp" />
-
-    <TextView
-        android:text="ABS(Y) :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature3Text"
-        android:layout_below="@+id/tv_feature2Text"
-        android:layout_alignStart="@+id/tv_feature2Text"
-        android:layout_marginTop="10dp" />
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature3"
-        android:layout_alignBaseline="@+id/tv_feature3Text"
-        android:layout_alignStart="@id/tv_feature3Text"
-        android:layout_marginLeft="160dp" />
-
-    <TextView
-        android:text="ABS(Z) :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature4Text"
-        android:layout_below="@+id/tv_feature3Text"
-        android:layout_alignStart="@+id/tv_feature3Text"
-        android:layout_marginTop="10dp" />
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature4"
-        android:layout_alignBaseline="@+id/tv_feature4Text"
-        android:layout_alignStart="@id/tv_feature4Text"
-        android:layout_marginLeft="160dp" />
-
-    <TextView
-        android:text="RAD.Q(X^2+Y^2+Z^2) :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature5Text"
-        android:layout_below="@+id/tv_feature4Text"
-        android:layout_alignStart="@+id/tv_feature4Text"
-        android:layout_marginTop="10dp" />
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_feature5"
-        android:layout_alignBaseline="@+id/tv_feature5Text"
-        android:layout_alignStart="@id/tv_feature5Text"
-        android:layout_marginLeft="160dp" />
-
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -176,6 +78,222 @@
         android:clickable="false"
         android:editable="false" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/ib_startRec"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/featureScroll">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/featureLayout"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="FEATURES CALCOLATE : (scroll-down for other)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_features" />
+
+            <TextView
+                android:text="phone_DEV.STD(X) : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature1Text"
+                android:layout_below="@id/tv_features"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature1"
+                android:layout_alignBaseline="@+id/tv_feature1Text"
+                android:layout_alignStart="@id/tv_feature1Text"
+                android:layout_marginLeft="160dp"/>
+
+            <TextView
+                android:text="phone_ABS(X) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature2Text"
+                android:layout_below="@+id/tv_feature1Text"
+                android:layout_alignStart="@+id/tv_feature1Text"
+                android:layout_marginTop="10dp" />
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature2"
+                android:layout_alignBaseline="@+id/tv_feature2Text"
+                android:layout_alignStart="@id/tv_feature2Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="phone_ABS(Y) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature3Text"
+                android:layout_below="@+id/tv_feature2Text"
+                android:layout_alignStart="@+id/tv_feature2Text"
+                android:layout_marginTop="10dp" />
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature3"
+                android:layout_alignBaseline="@+id/tv_feature3Text"
+                android:layout_alignStart="@id/tv_feature3Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="phone_ABS(Z) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature4Text"
+                android:layout_below="@+id/tv_feature3Text"
+                android:layout_alignStart="@+id/tv_feature3Text"
+                android:layout_marginTop="10dp" />
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature4"
+                android:layout_alignBaseline="@+id/tv_feature4Text"
+                android:layout_alignStart="@id/tv_feature4Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="phone_moduleDevXYZ :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature5Text"
+                android:layout_below="@+id/tv_feature4Text"
+                android:layout_alignStart="@+id/tv_feature4Text"
+                android:layout_marginTop="10dp" />
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature5"
+                android:layout_alignBaseline="@+id/tv_feature5Text"
+                android:layout_alignStart="@id/tv_feature5Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="phone_ENERGY(Z) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature6Text"
+                android:layout_below="@+id/tv_feature5Text"
+                android:layout_alignStart="@+id/tv_feature5Text"
+                android:layout_marginTop="10dp" />
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature6"
+                android:layout_alignBaseline="@+id/tv_feature6Text"
+                android:layout_alignStart="@id/tv_feature6Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="band_XMEAN :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature7Text"
+                android:layout_below="@+id/tv_feature6Text"
+                android:layout_alignStart="@+id/tv_feature6Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature7"
+                android:layout_alignBaseline="@+id/tv_feature7Text"
+                android:layout_alignStart="@id/tv_feature7Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="band_ZMEAN :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature8Text"
+                android:layout_below="@+id/tv_feature7Text"
+                android:layout_alignStart="@+id/tv_feature7Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature8"
+                android:layout_alignBaseline="@+id/tv_feature8Text"
+                android:layout_alignStart="@id/tv_feature8Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="band_devSTD(Z) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature9Text"
+                android:layout_below="@+id/tv_feature8Text"
+                android:layout_alignStart="@+id/tv_feature8Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature9"
+                android:layout_alignBaseline="@+id/tv_feature9Text"
+                android:layout_alignStart="@id/tv_feature9Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="band_ENERGY(X) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature10Text"
+                android:layout_below="@+id/tv_feature9Text"
+                android:layout_alignStart="@+id/tv_feature9Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature10"
+                android:layout_alignBaseline="@+id/tv_feature10Text"
+                android:layout_alignStart="@id/tv_feature10Text"
+                android:layout_marginLeft="160dp" />
+
+            <TextView
+                android:text="band_ENERGY(Z) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature11Text"
+                android:layout_below="@+id/tv_feature10Text"
+                android:layout_alignStart="@+id/tv_feature10Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature11"
+                android:layout_alignBaseline="@+id/tv_feature11Text"
+                android:layout_alignStart="@id/tv_feature11Text"
+                android:layout_marginLeft="160dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -183,8 +301,17 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/printfile" />
+        android:src="@android:drawable/ic_menu_mylocation" />
+
+    <TextView
+        android:text="Track the Room!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/ib_printvett"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/textView" />
 
 
 </RelativeLayout>

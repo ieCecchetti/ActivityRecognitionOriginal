@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static int maxRip=6;
     private static List<String> activityList;
     private static List<String> dateList;
+    private static List<String> featureList;
 
     private static Context context;
     private static Activity activity;
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static boolean phoneStatus=false;
     public static boolean bandStatus=false;
     public static boolean beaconStatus=false;
+    public static boolean recorderWorkingStatus=false;
     public static int m_interval = 1000; // 1 seconds by default, can be changed later
     public static Handler m_handler;
     private static BandClient client = null;
@@ -234,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         activityList= new ArrayList<String>();
         dateList= new ArrayList<String>();
+        featureList= new ArrayList<String>();
 
 
         //--------------------------------------------------------------------------BEACONS SETTINGS
@@ -470,14 +473,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return activity;
     }
 
+    public static void RecorderWorkingStatusON()
+    {
+        recorderWorkingStatus=true;
+    }
 
+    public static void RecorderWorkingStatusOFF()
+    {
+        recorderWorkingStatus=false;
+    }
 
     public static boolean initNewSession() {
-       if(!projectUtils.checkBluetoothStatus()){
-           Toast.makeText(getContext(),
-                   "Bluetooth disabled, impossible to connect with beacons and band!",Toast.LENGTH_LONG).show();
-       }
+
+        RecorderWorkingStatusON();
+        if(!projectUtils.checkBluetoothStatus()){
+            Toast.makeText(getContext(),
+                    "Bluetooth disabled, impossible to connect with beacons and band!",Toast.LENGTH_LONG).show();
+        }
         beaconInit();
+        staticCalculatorObj.flushAllData();
         path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
         File file = new File(path, appFolder);
         if (!file.exists()) {
@@ -564,6 +578,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public static void stopRepeatingTask()
     {
+        RecorderWorkingStatusOFF();
         m_handler.removeCallbacks(m_statusChecker);
         Fragment_2recorder.stopRecord();
     }
@@ -659,6 +674,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public static void abortRecording(){
+        staticCalculatorObj.flushAllData();
+        activityList.clear();
         staticCalculatorObj.StopRecFirstLayer();
         staticCalculatorObj.StopRecSecondLayer();
         nRip=maxRip;
@@ -666,6 +683,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public static void activityLoop()
     {
+        if (!recorderWorkingStatus)
+        {
+            abortRecording();
+            return;
+        }
         if(nRip!=maxRip)
         {
             Handler PhoneBandWindow = new Handler();
@@ -683,9 +705,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             BandWindow.postDelayed(new Runnable() {
                 public void run() {
                     // Start Recording for the second layer
+                    firstLayer = staticCalculatorObj.getFirstLayerActivity();
                     secondLayer = staticCalculatorObj.getSecondLayerActivity();
-                    Fragment_2recorder.setDataFromMainClass(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
-                            String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), staticCalculatorObj.getSecondLayerActivity());
+                    Fragment_2recorder.setDataFromMainClass1L(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
+                            String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), String.valueOf(staticCalculatorObj.getEnergyZ()), firstLayer);
+                    Fragment_2recorder.setDataFromMainClass2L(String.valueOf(staticCalculatorObj.getXmeansBand()), String.valueOf(staticCalculatorObj.getZmeansBand()), String.valueOf(staticCalculatorObj.getStdDevZBand()),
+                            String.valueOf(staticCalculatorObj.getXEnergyBand()),String.valueOf(staticCalculatorObj.getZEnergyBand()), secondLayer);
                     staticCalculatorObj.StopRecSecondLayer();
                     ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                     toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
@@ -695,14 +720,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Calendar c = Calendar.getInstance();
                     projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+" "+sdf.format(c.getTime()) + ";\n"));
                     activityList.add(secondLayer.split(":")[1]);
+                    featureList.add("Xmean: "+staticCalculatorObj.getXmeansBand()+"\nZmean: "+staticCalculatorObj.getZmeansBand()+"\nZdevStd: "+
+                                    staticCalculatorObj.getStdDevZBand()+"\nXenergy: "+staticCalculatorObj.getXEnergyBand()+"\nZenergy: "+staticCalculatorObj.getZEnergyBand()
+                                    +"\n1Lyaer: "+firstLayer.split(":")[1]);
                     dateList.add(projectUtils.getDate());
                     activityLoop();
                 }
             }, 10000);
             nRip++;
         }else{
-            MainActivity.stopRepeatingTask();
-            staticCalculatorObj.setActivityData(activityList, dateList);
+            stopRepeatingTask();
+            staticCalculatorObj.setActivityData(activityList, dateList, featureList);
             //Fragment_4show.printListView(activityList, dateList);
         }
 
@@ -765,7 +793,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onBandAccelerometerChanged(BandAccelerometerEvent bandAccelerometerEvent) {
             if((bandAccelerometerEvent != null)&&staticCalculatorObj.isStartedSLayer()&& bandRec){
-                Log.i("mylog","bandAcc registra" +staticCalculatorObj.isStartedSLayer()+ " e "+ bandRec);
+                //Log.i("mylog","bandAcc registra" +staticCalculatorObj.isStartedSLayer()+ " e "+ bandRec);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALY);
                 Calendar c = Calendar.getInstance();
                 String string = String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8)+" "+
@@ -1163,8 +1191,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static void printNearestBeacon(){
         if (!NearestBeaconId.equals(""))
         {
-            Toast.makeText(getContext(), "Nearest Beacon is :"+NearestBeaconId, Toast.LENGTH_SHORT).show();
-            Log.i("beacon","nearest is "+NearestBeaconId);
+            Toast.makeText(getContext(), "Nearest Beacon is :"+staticCalculatorObj.BeaconIdToRoom(NearestBeaconId), Toast.LENGTH_SHORT).show();
+            //Log.i("beacon","nearest is "+NearestBeaconId);
         }
         Toast.makeText(getContext(), "No beacon altready registered!", Toast.LENGTH_SHORT).show();
     }
@@ -1174,6 +1202,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         NearestBeaconId="";
         NearestBeaconDistance=10;
     }
+
+
 
 
 

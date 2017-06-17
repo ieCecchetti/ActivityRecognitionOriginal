@@ -18,11 +18,12 @@ import android.widget.Toast;
 
 public class Fragment_2recorder extends Fragment {
 
-    private static TextView feature1, feature2, feature3, feature4, feature5;
+    private static TextView feature1, feature2, feature3, feature4, feature5, feature6;
+    private static TextView feature7, feature8, feature9, feature10, feature11;
     private static TextView activityTextView;
     private static TextView tvRecordTime;
     private static ImageButton buttonStart;
-    private boolean isstop=true;
+    private static boolean isstop=true;
 
 
 
@@ -31,12 +32,20 @@ public class Fragment_2recorder extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_2recorder, container, false);
-
+        //firstLayer features
         feature1 = (TextView) rootView.findViewById(R.id.tv_feature1);
         feature2 = (TextView) rootView.findViewById(R.id.tv_feature2);
         feature3 = (TextView) rootView.findViewById(R.id.tv_feature3);
         feature4 = (TextView) rootView.findViewById(R.id.tv_feature4);
         feature5 = (TextView) rootView.findViewById(R.id.tv_feature5);
+        feature6 = (TextView) rootView.findViewById(R.id.tv_feature6);
+        //secondLayer features
+        feature7 = (TextView) rootView.findViewById(R.id.tv_feature7);
+        feature8 = (TextView) rootView.findViewById(R.id.tv_feature8);
+        feature9 = (TextView) rootView.findViewById(R.id.tv_feature9);
+        feature10 = (TextView) rootView.findViewById(R.id.tv_feature10);
+        feature11 = (TextView) rootView.findViewById(R.id.tv_feature11);
+
         activityTextView = (TextView) rootView.findViewById(R.id.et_Activity);
         activityTextView.setText("Activity : None");
         activityTextView.setEnabled(false);
@@ -105,14 +114,25 @@ public class Fragment_2recorder extends Fragment {
 
 
 
-    public static void setDataFromMainClass(String StdDevX, String XmeansModule, String YmeansModule, String ZmeansModule, String StdDevXYZ, String seconlayer )
+    public static void setDataFromMainClass1L(String StdDevXPhone, String XmeansModulePhone, String YmeansModulePhone, String ZmeansModulePhone, String StdDevXYZPhone, String ZenergyPhone, String firstLayer )
     {
-        feature1.setText(StdDevX);
-        feature2.setText(XmeansModule);
-        feature3.setText(YmeansModule);
-        feature4.setText(ZmeansModule);
-        feature5.setText(StdDevXYZ);
-        activityTextView.setText(seconlayer);
+        feature1.setText(MainActivity.projectUtils.round(Double.parseDouble(StdDevXPhone),4));
+        feature2.setText(MainActivity.projectUtils.round(Double.parseDouble(XmeansModulePhone),4));
+        feature3.setText(MainActivity.projectUtils.round(Double.parseDouble(YmeansModulePhone),4));
+        feature4.setText(MainActivity.projectUtils.round(Double.parseDouble(ZmeansModulePhone),4));
+        feature5.setText(MainActivity.projectUtils.round(Double.parseDouble(StdDevXYZPhone),4));
+        feature6.setText(MainActivity.projectUtils.round(Double.parseDouble(ZenergyPhone),4));
+        activityTextView.setText(firstLayer);
+    }
+
+    public static void setDataFromMainClass2L(String xMeanBand, String zMeanBand, String ZdevStdBand, String XenergyBand, String ZenergyBand, String secondlayer )
+    {
+        feature7.setText(MainActivity.projectUtils.round(Double.parseDouble(xMeanBand),4));
+        feature8.setText(MainActivity.projectUtils.round(Double.parseDouble(zMeanBand),4));
+        feature9.setText(MainActivity.projectUtils.round(Double.parseDouble(ZdevStdBand),4));
+        feature10.setText(MainActivity.projectUtils.round(Double.parseDouble(XenergyBand),4));
+        feature11.setText(MainActivity.projectUtils.round(Double.parseDouble(ZenergyBand),4));
+        activityTextView.setText(secondlayer);
     }
 
     public static void setRecordTime(String Time)
@@ -132,6 +152,7 @@ public class Fragment_2recorder extends Fragment {
             }
         }
     }
+
 
 
 }

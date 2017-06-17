@@ -60,6 +60,13 @@ public class Fragment_4show extends Fragment {
     {
         tableActivityRow = new TableRow(context);
         tableActivityRow.setId(id);
+        tableActivityRow.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                rowClick(v);
+            }
+        });
         Id = new TextView(context);
         Activity = new TextView(context);
         DateTime = new TextView(context);
@@ -81,7 +88,7 @@ public class Fragment_4show extends Fragment {
         tableActivity.addView(tableActivityRow);
     }
 
-    public void printListView(List<String> vettActivity, List<String> vettData)
+    public void printListView(List<String> vettActivity, List<String> vettData, List<String> vettFeatures)
     {
         if(vettActivity.size()!= 0)
         {
@@ -114,9 +121,14 @@ public class Fragment_4show extends Fragment {
 
         // Make sure that we are currently visible
         if (this.isVisible()) {
-            printListView(MainActivity.staticCalculatorObj.getActivityList(),MainActivity.staticCalculatorObj.getDateList());
+            printListView(MainActivity.staticCalculatorObj.getActivityList(),MainActivity.staticCalculatorObj.getDateList(), MainActivity.staticCalculatorObj.getFeaturesList());
         }
     }
+
+    public static void rowClick(View view) {
+        Toast.makeText(MainActivity.getContext(),MainActivity.staticCalculatorObj.getFeaturAtId(view.getId()), Toast.LENGTH_SHORT).show();
+    }
+
 
 
 

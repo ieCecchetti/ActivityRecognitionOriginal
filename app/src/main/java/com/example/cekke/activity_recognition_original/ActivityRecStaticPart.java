@@ -10,6 +10,8 @@ import com.microsoft.band.sensors.BandAccelerometerEvent;
 
 import net.sf.javaml.utils.MathUtils;
 
+import org.jtransforms.fft.DoubleFFT_1D;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,21 +23,29 @@ public final class ActivityRecStaticPart {
     private static double[] valueListX = new double[150];
     private static double[] valueListY = new double[150];
     private static double[] valueListZ = new double[150];
-    public static double[] valueListXBand = new double[300];
-    public static double[] valueListYBand = new double[300];
-    public static double[] valueListZBand = new double[300];
+    public static double[] valueListXBand = new double[190];
+    public static double[] valueListYBand = new double[190];
+    public static double[] valueListZBand = new double[190];
     private static List<String> activityList;
     private static List<String> dateList;
+    private static List<String> featuresList;
     private static boolean started=false;
     private static boolean startedSLayer=false;
     private static int contDataPhone=0;
     private static int contDataBand=0;
-    private static double stdDevX;
-    private static double XmeansModule;
-    private static double YmeansModule;
-    private static double ZmeansModule;
-    private static double stdDevXYZ;
+    private static double stdDevXPhone;
+    private static double XmeansModulePhone;
+    private static double YmeansModulePhone;
+    private static double ZmeansModulePhone;
+    private static double ZEnergyPhone;
+    private static double stdDevXYZPhone;
     private static String firstLayerActivity="Activity : None";
+    private static double XmeansBand;
+    private static double ZmeansBand;
+    private static double XEnergyBand;
+    private static double ZEnergyBand;
+    private static double stdDevXBand;
+    private static double stdDevZBand;
     private static String secondLayerActivity="Activity : None";
     private static boolean ReadyFL=false;
     private static boolean ReadySL=false;
@@ -45,6 +55,8 @@ public final class ActivityRecStaticPart {
     {
         activityList= new ArrayList<String>();
         dateList= new ArrayList<String>();
+        featuresList= new ArrayList<String>();
+        valueListXBand[0]=0;
     }
 
     public boolean addPhoneData(SensorEvent event)
@@ -69,10 +81,13 @@ public final class ActivityRecStaticPart {
 
     public void addBandData(BandAccelerometerEvent bandAccelerometerEvent)
     {
-        valueListXBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8));
-        valueListYBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationY()*9.8));
-        valueListZBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationZ()*9.8));
-        contDataBand++;
+        if (contDataBand<190)
+        {
+            valueListXBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationX()*9.8));
+            valueListYBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationY()*9.8));
+            valueListZBand[contDataBand]=Double.parseDouble(String.valueOf(bandAccelerometerEvent.getAccelerationZ()*9.8));
+            contDataBand++;
+        }
     }
 
     public boolean isStarted()
@@ -110,33 +125,27 @@ public final class ActivityRecStaticPart {
 
     private void calcFirstLayerActivity(){
         ReadyFL=false;
-        filterData(150);
+        //filterPhoneData(150);
         double Xmeans= MathUtils.arithmicMean(valueListX);
-        double Ymeans=MathUtils.arithmicMean(valueListY);
+        double Ymeans= MathUtils.arithmicMean(valueListY);
         double Zmeans= MathUtils.arithmicMean(valueListZ);
+        ZEnergyPhone=energy(valueListZ);
 
-        stdDevX= Math.sqrt(variance(valueListX,Xmeans,valueListY.length));
-        //feature1.setText(String.valueOf(stdDevX));
+        stdDevXPhone= Math.sqrt(variance(valueListX,Xmeans,valueListY.length));
 
-        XmeansModule=Math.abs(Xmeans);
-        //feature2.setText(String.valueOf(XmeansModule));
-        YmeansModule=Math.abs(Ymeans);
-        //feature3.setText(String.valueOf(YmeansModule));
-        ZmeansModule=Math.abs(Zmeans);
-        //feature4.setText(String.valueOf(ZmeansModule));
+        XmeansModulePhone=Math.abs(Xmeans);
+        YmeansModulePhone=Math.abs(Ymeans);
+        ZmeansModulePhone=Math.abs(Zmeans);
 
-        stdDevXYZ = Math.sqrt(variance(valueListX,Xmeans,valueListX.length)+
+        stdDevXYZPhone = Math.sqrt(variance(valueListX,Xmeans,valueListX.length)+
                 variance(valueListY,Ymeans,valueListY.length)+
                 variance(valueListZ,Zmeans,valueListZ.length));
-        //feature5.setText(String.valueOf(stdDevXYZ));
-
-
 
         //posizione?
-        if (YmeansModule>8.8)
+        if (YmeansModulePhone>8.8)
         {
             //posizione eretta
-            if(stdDevXYZ>1.2  && stdDevX>0.7)
+            if(stdDevXYZPhone>1.2  && stdDevXPhone>0.7)
             {
                 //walking
                 firstLayerActivity="Activity : WALKING";
@@ -144,43 +153,206 @@ public final class ActivityRecStaticPart {
                 firstLayerActivity="Activity : STANDING";
             }
         }else{
-            //sitting
-            if ((XmeansModule>1.3) || (stdDevX)>0.32) //se la stdDev è alta solitamente siamo in sitting
-            {
-                if(stdDevX<0.1) // se stdDev<0.1 si raggiunge solitamente solo da lying
-                {
-                    //caso limite
-                    firstLayerActivity="Activity : LYING";
-
-                }else{
-                    firstLayerActivity="Activity : SITTING";
-                }
-
-            }
-            else{
-                firstLayerActivity="Activity : LYING";
-            }
-            //lying sul lato
-            if (ZmeansModule<8.5){
-                if(Ymeans>1)
-                {
-                    firstLayerActivity="Activity : SITTING";
-                }else{
-                    firstLayerActivity="Activity : LYING";
-                }
-            }
+            //impossible to recognise... we need band to do it right
+            firstLayerActivity="Activity : SITTING";
         }
-
-
     }
 
     private void calcSecondLayerActivity(){
 
         ReadySL=false;
-        secondLayerActivity=firstLayerActivity;
+
+        //feature calc
+        XmeansBand= MathUtils.arithmicMean(valueListXBand);
+        ZmeansBand= MathUtils.arithmicMean(valueListZBand);
+        stdDevXBand= Math.sqrt(variance(valueListXBand,XmeansBand,valueListX.length));
+        stdDevZBand= Math.sqrt(variance(valueListZBand,ZmeansBand,valueListZBand.length));
+        XEnergyBand= energy(valueListXBand);
+        ZEnergyBand= energy(valueListZBand);
+
+        String room=BeaconIdToRoom(MainActivity.NearestBeaconId);
+        room="bedroom";
+
+        if(firstLayerActivity.equals("Activity : SITTING"))
+        {
+            firstLayerActivity= LyingOrSittingVerify(firstLayerActivity,room);
+        }
+
+        //three selection
+        if (!room.equals("none")){
+            switch (firstLayerActivity)
+            {
+                case "Activity : LYING":
+                    switch (room)
+                    {
+                        case "livingroom":
+                            secondLayerActivity="Activity : LYING SOFA'";
+                            break;
+                        case "bedroom":
+                            secondLayerActivity="Activity : LYING BED";
+                            break;
+                        case "kitchen":
+                            secondLayerActivity="Activity : SITTING";
+                            break;
+                        default:
+                            secondLayerActivity=firstLayerActivity;
+                            break;
+                    }
+                    break;
+                case "Activity : STANDING":
+                    switch (room)
+                    {
+                        case "bathroom":
+                            if (XmeansBand>0)
+                            {
+                                secondLayerActivity=SweepOrVacum("Activity : STANDING");
+                            }
+                            else if (XmeansBand<0)
+                            {
+                                secondLayerActivity=BrushOrHair("Activity : STANDING");
+                            }
+                            break;
+                        case "livingroom":
+                            secondLayerActivity=SweepOrVacum("Activity : STANDING");
+                            break;
+                        case "bedroom":
+                            secondLayerActivity=SweepOrVacum("Activity : STANDING");
+                            break;
+                        case "kitchen":
+                            secondLayerActivity=SweepOrVacum("Activity : STANDING");
+                            break;
+                    }
+                    break;
+                case "Activity : SITTING":
+                    switch (room)
+                    {
+                        case "livingroom":
+                            secondLayerActivity=TypeEatOrDrink("Activity : SIT.SOFA'");
+                            break;
+                        case "bedroom":
+                            secondLayerActivity=TypeEatOrDrink("Activity : SITTING");
+                            break;
+                        case "kitchen":
+                            secondLayerActivity=TypeEatOrDrink("Activity : SITTING");
+                            break;
+                    }
+                    break;
+                case "Activity : WALKING":
+                    switch (room)
+                    {
+                        case "bathroom":
+                            secondLayerActivity=SweepOrVacum("Activity : WALKING");
+                            break;
+                        case "livingroom":
+                            secondLayerActivity=SweepOrVacum("Activity : WALKING");
+                            break;
+                        case "bedroom":
+                            secondLayerActivity=SweepOrVacum("Activity : WALKING");
+                            break;
+                        case "kitchen":
+                            secondLayerActivity=SweepOrVacum("Activity : WALKING");
+                            break;
+                    }
+                    break;
+            }
+        }else{
+            secondLayerActivity=firstLayerActivity;
+        }
     }
 
-    private void filterData(int nData){
+    private String LyingOrSittingVerify(String FL, String rom){
+        String res=FL;
+        //verify first layer (sitting or lying)
+        if (XmeansBand>1){
+            res= "Activity : SITTING";
+        }else{
+            //Log.i("devstdx","value :"+stdDevXBand);
+            if(stdDevXBand>0.2)
+            {
+                res= "Activity : SITTING";
+            }else{
+                res= "Activity : LYING";
+            }
+        }
+        return res;
+    }
+
+    private String SweepOrVacum(String deambulante)
+    {
+        String res = deambulante;
+        if (res.equals("Activity : STANDING"))
+        {
+            if (XmeansBand > -4 && XmeansBand < 2)
+            {
+                res =  "Activity : SWEEPING";
+            }else if(XmeansBand > 4 && XmeansBand < 10){
+                if (XmeansBand > 8 && XmeansBand < 10){
+                    if(stdDevXBand < 0.8)
+                    {
+                        res =  deambulante;
+                    }else{
+                        res =  "Activity : VACUUMING";
+                    }
+                }else
+                {
+                    res =  "Activity : VACUUMING";
+                }
+            }
+        }else if(res.equals("Activity : WALKING"))
+        {
+            if (XmeansBand>8.8)
+            {
+                res =  deambulante;
+            }else{
+                if (XmeansBand > -4 && XmeansBand < 2)
+                {
+                    res =  "Activity : SWEEPING";
+                }else if(XmeansBand > 4 && XmeansBand < 10){
+                    res =  "Activity : VACUUMING";
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private String BrushOrHair(String deambulante)
+    {
+        String res = deambulante;
+        if (ZEnergyBand > 8000){
+            res =  "Activity : BRUSHING";
+        }else if(ZEnergyBand < 8000 && ZEnergyBand > 1900)
+        {
+            res =  "Activity : HAIRSTYLE";
+        }else{
+            res =  deambulante;
+        }
+        return res;
+    }
+
+    private String TypeEatOrDrink(String deambulante)
+    {
+        String res = deambulante;
+        //drink or eating
+        if (ZmeansBand > 7){
+            if(getXmeansBand()<0)  //stdDevZBand>0.1
+            {
+                res =  "Activity : TYPING";
+            }else{
+                res =  deambulante;
+            }
+        }else{
+            if(stdDevZBand>1.7)
+            {
+                res =  "Activity : EATING";
+            }else{
+                res =  "Activity : DRINKING";
+            }
+        }
+        return res;
+    }
+
+    private void filterPhoneData(int nData){
         Double sumX;
         Double sumY;
         Double sumZ;
@@ -205,6 +377,71 @@ public final class ActivityRecStaticPart {
             sumZ+=valueListZ[i+2];
         }
 
+    }
+
+    private void filterBandData(int nData){
+        Double sumX;
+        Double sumY;
+        Double sumZ;
+        for (int i=2;i<nData-2;i++)  //pre 96
+        {
+            sumX=valueListXBand[i-2];
+            sumX+=valueListXBand[i-1];
+            sumX+=valueListXBand[i];
+            sumX+=valueListXBand[i+1];
+            sumX+=valueListXBand[i+2];
+
+            sumY=valueListYBand[i-2];
+            sumY+=valueListYBand[i-1];
+            sumY+=valueListYBand[i];
+            sumY+=valueListYBand[i+1];
+            sumY+=valueListYBand[i+2];
+
+            sumZ=valueListZBand[i-2];
+            sumZ+=valueListZBand[i-1];
+            sumZ+=valueListZBand[i];
+            sumZ+=valueListZBand[i+1];
+            sumZ+=valueListZBand[i+2];
+        }
+
+    }
+
+    private double Mean(double[] input)
+    {
+        double sum=0.0;
+        for (int i=0; i<input.length; i++)
+        {
+            sum+= input[i];
+        }
+        return sum/input.length;
+    }
+
+    private double energy(double[] input)
+    {
+        DoubleFFT_1D fftDo = new DoubleFFT_1D(input.length);
+        double[] fft = new double[input.length * 2];
+        double[] fftvalsModule = new double[input.length];
+        System.arraycopy(input, 0, fft, 0, input.length);
+        fftDo.realForwardFull(fft);
+
+        //System.out.println("--------------------------fft module values");
+        int k=0;
+        for (int i=0;i<input.length; i++){
+            fftvalsModule[i]=(fft[k]*fft[k])+(fft[k+1]*fft[k+1]);
+            k=k+2;
+        }
+        double sum=0;
+        for (double d: fftvalsModule){
+            //System.out.println(d);
+            sum+=d;
+        }
+        double energy= sum/input.length;
+
+        //System.out.println("----->energy:"+ MainActivity.projectUtils.round(energy,4) +" <-------");
+        //System.out.println("--------------------------get back to normal val");
+        //fftDo.complexInverse(fft,true);
+
+        return energy;
     }
 
     private double variance(double[] array,double mean, int nElem)
@@ -278,6 +515,15 @@ public final class ActivityRecStaticPart {
         contDataBand=0;
     }
 
+    public void flushAllData()
+    {
+        flushFLData();
+        flushSLData();
+        featuresList.clear();
+        activityList.clear();
+        dateList.clear();
+    }
+
     public int getSensPhoneCount()
     {
         return contDataPhone;
@@ -308,10 +554,10 @@ public final class ActivityRecStaticPart {
         Xstring="";
         Ystring="";
         Zstring="";
-        for (int i=0;i<MainActivity.staticCalculatorObj.getSensBandCount();i++){
-            Xstring+= valueListX[i] + " ," ;
-            Ystring+= valueListY[i] + " ," ;
-            Zstring+= valueListZ[i] + " ," ;
+        for (int i=0;i<contDataBand;i++){
+            Xstring+= valueListXBand[i] + " ," ;
+            Ystring+= valueListYBand[i] + " ," ;
+            Zstring+= valueListZBand[i] + " ," ;
         }
 
         Log.i("X", Xstring);
@@ -321,34 +567,66 @@ public final class ActivityRecStaticPart {
 
     public double getStdDevX()
     {
-        return stdDevX;
+        return stdDevXPhone;
     }
 
     public double getXmeansModule()
     {
-        return XmeansModule;
+        return XmeansModulePhone;
     }
 
     public double getYmeansModule()
     {
-        return YmeansModule;
+        return YmeansModulePhone;
     }
 
     public double getZmeansModule()
     {
-        return ZmeansModule;
+        return ZmeansModulePhone;
     }
 
     public double getStdDevXYZ()
     {
-        return stdDevXYZ;
+        return stdDevXYZPhone;
     }
 
-    public  void setActivityData(List<String> vettActivity, List<String> vettData ){
+    public double getEnergyZ()
+    {
+        return ZEnergyPhone;
+    }
+
+    public double getXmeansBand()
+    {
+        return XmeansBand;
+    }
+
+    public double getZmeansBand()
+    {
+        return ZmeansBand;
+    }
+
+    public double getStdDevZBand()
+    {
+        return stdDevZBand;
+    }
+
+    public double getXEnergyBand()
+    {
+        return XEnergyBand;
+    }
+
+    public double getZEnergyBand()
+    {
+        return ZEnergyBand;
+    }
+
+    public  void setActivityData(List<String> vettActivity, List<String> vettData ,List<String> featurevett){
         activityList.clear();
         dateList.clear();
+        featuresList.clear();
         activityList=vettActivity;
         dateList=vettData;
+        featuresList=featurevett;
     }
 
     public List<String> getActivityList(){
@@ -357,6 +635,10 @@ public final class ActivityRecStaticPart {
 
     public List<String> getDateList(){
         return dateList;
+    }
+
+    public List<String> getFeaturesList(){
+        return featuresList;
     }
 
     public void pushTime(String time)
@@ -372,6 +654,32 @@ public final class ActivityRecStaticPart {
     public void restartTime()
     {
         currentTime= "00:00 min";
+    }
+
+    public String BeaconIdToRoom(String id)
+    {
+        switch(id)
+        {
+            case "24543":
+                return "bathroom";
+
+            case "44943":
+                return "kitchen";
+
+            case "66435":
+                return "livingroom";
+
+            case "8679":
+                return "bedroom";
+
+            default:
+                return "none";
+        }
+    }
+
+    public static String getFeaturAtId(int Id)
+    {
+        return featuresList.get(Id);
     }
 
 
