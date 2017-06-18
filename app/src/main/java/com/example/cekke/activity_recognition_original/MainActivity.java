@@ -710,7 +710,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Fragment_2recorder.setDataFromMainClass1L(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
                             String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), String.valueOf(staticCalculatorObj.getEnergyZ()), firstLayer);
                     Fragment_2recorder.setDataFromMainClass2L(String.valueOf(staticCalculatorObj.getXmeansBand()), String.valueOf(staticCalculatorObj.getZmeansBand()), String.valueOf(staticCalculatorObj.getStdDevZBand()),
-                            String.valueOf(staticCalculatorObj.getXEnergyBand()),String.valueOf(staticCalculatorObj.getZEnergyBand()), secondLayer);
+                            String.valueOf(staticCalculatorObj.getStdDevXBand()), String.valueOf(staticCalculatorObj.getXEnergyBand()),String.valueOf(staticCalculatorObj.getZEnergyBand()), secondLayer);
                     staticCalculatorObj.StopRecSecondLayer();
                     ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                     toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
@@ -721,14 +721,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     projectUtils.saveInFile(path, folder, "ActivityList", (staticCalculatorObj.getSecondLayerActivity().split(":")[1]+" "+sdf.format(c.getTime()) + ";\n"));
                     activityList.add(secondLayer.split(":")[1]);
                     featureList.add("Xmean: "+staticCalculatorObj.getXmeansBand()+"\nZmean: "+staticCalculatorObj.getZmeansBand()+"\nZdevStd: "+
-                                    staticCalculatorObj.getStdDevZBand()+"\nXenergy: "+staticCalculatorObj.getXEnergyBand()+"\nZenergy: "+staticCalculatorObj.getZEnergyBand()
-                                    +"\n1Lyaer: "+firstLayer.split(":")[1]);
+                                    staticCalculatorObj.getStdDevZBand()+"\nXdevStd: "+staticCalculatorObj.getStdDevXBand()+"\nXenergy: "+staticCalculatorObj.getXEnergyBand()
+                                    +"\nZenergy: "+staticCalculatorObj.getZEnergyBand()+"\n1Lyaer: "+firstLayer.split(":")[1]);
                     dateList.add(projectUtils.getDate());
                     activityLoop();
                 }
             }, 10000);
             nRip++;
         }else{
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 100);
             stopRepeatingTask();
             staticCalculatorObj.setActivityData(activityList, dateList, featureList);
             //Fragment_4show.printListView(activityList, dateList);

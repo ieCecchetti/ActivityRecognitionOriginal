@@ -291,6 +291,24 @@
                 android:layout_alignStart="@id/tv_feature11Text"
                 android:layout_marginLeft="160dp" />
 
+            <TextView
+                android:text="band_devSTD(X) :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature12Text"
+                android:layout_below="@+id/tv_feature11Text"
+                android:layout_alignStart="@+id/tv_feature11Text"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_feature12"
+                android:layout_alignBaseline="@+id/tv_feature12Text"
+                android:layout_alignStart="@id/tv_feature12Text"
+                android:layout_marginLeft="160dp" />
+
         </RelativeLayout>
     </ScrollView>
 

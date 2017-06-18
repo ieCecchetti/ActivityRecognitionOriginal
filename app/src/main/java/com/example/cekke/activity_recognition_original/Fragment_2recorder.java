@@ -19,7 +19,7 @@ import android.widget.Toast;
 public class Fragment_2recorder extends Fragment {
 
     private static TextView feature1, feature2, feature3, feature4, feature5, feature6;
-    private static TextView feature7, feature8, feature9, feature10, feature11;
+    private static TextView feature7, feature8, feature9, feature10, feature11,feature12;
     private static TextView activityTextView;
     private static TextView tvRecordTime;
     private static ImageButton buttonStart;
@@ -45,6 +45,7 @@ public class Fragment_2recorder extends Fragment {
         feature9 = (TextView) rootView.findViewById(R.id.tv_feature9);
         feature10 = (TextView) rootView.findViewById(R.id.tv_feature10);
         feature11 = (TextView) rootView.findViewById(R.id.tv_feature11);
+        feature12 = (TextView) rootView.findViewById(R.id.tv_feature12);
 
         activityTextView = (TextView) rootView.findViewById(R.id.et_Activity);
         activityTextView.setText("Activity : None");
@@ -125,13 +126,14 @@ public class Fragment_2recorder extends Fragment {
         activityTextView.setText(firstLayer);
     }
 
-    public static void setDataFromMainClass2L(String xMeanBand, String zMeanBand, String ZdevStdBand, String XenergyBand, String ZenergyBand, String secondlayer )
+    public static void setDataFromMainClass2L(String xMeanBand, String zMeanBand, String ZdevStdBand, String XdevStdBand, String XenergyBand, String ZenergyBand, String secondlayer )
     {
         feature7.setText(MainActivity.projectUtils.round(Double.parseDouble(xMeanBand),4));
         feature8.setText(MainActivity.projectUtils.round(Double.parseDouble(zMeanBand),4));
         feature9.setText(MainActivity.projectUtils.round(Double.parseDouble(ZdevStdBand),4));
         feature10.setText(MainActivity.projectUtils.round(Double.parseDouble(XenergyBand),4));
         feature11.setText(MainActivity.projectUtils.round(Double.parseDouble(ZenergyBand),4));
+        feature12.setText(MainActivity.projectUtils.round(Double.parseDouble(XdevStdBand),4));
         activityTextView.setText(secondlayer);
     }
 

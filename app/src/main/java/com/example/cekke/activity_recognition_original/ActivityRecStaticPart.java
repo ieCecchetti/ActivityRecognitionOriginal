@@ -41,6 +41,7 @@ public final class ActivityRecStaticPart {
     private static double stdDevXYZPhone;
     private static String firstLayerActivity="Activity : None";
     private static double XmeansBand;
+    private static double YmeansBand;
     private static double ZmeansBand;
     private static double XEnergyBand;
     private static double ZEnergyBand;
@@ -164,6 +165,7 @@ public final class ActivityRecStaticPart {
 
         //feature calc
         XmeansBand= MathUtils.arithmicMean(valueListXBand);
+        YmeansBand= MathUtils.arithmicMean(valueListYBand);
         ZmeansBand= MathUtils.arithmicMean(valueListZBand);
         stdDevXBand= Math.sqrt(variance(valueListXBand,XmeansBand,valueListX.length));
         stdDevZBand= Math.sqrt(variance(valueListZBand,ZmeansBand,valueListZBand.length));
@@ -171,7 +173,7 @@ public final class ActivityRecStaticPart {
         ZEnergyBand= energy(valueListZBand);
 
         String room=BeaconIdToRoom(MainActivity.NearestBeaconId);
-        room="bedroom";
+        room="livingroom";
 
         if(firstLayerActivity.equals("Activity : SITTING"))
         {
@@ -203,12 +205,10 @@ public final class ActivityRecStaticPart {
                     switch (room)
                     {
                         case "bathroom":
-                            if (XmeansBand>0)
-                            {
+                            if (YmeansBand<-3){
                                 secondLayerActivity=SweepOrVacum("Activity : STANDING");
                             }
-                            else if (XmeansBand<0)
-                            {
+                            else if (YmeansBand>-3){
                                 secondLayerActivity=BrushOrHair("Activity : STANDING");
                             }
                             break;
@@ -230,7 +230,7 @@ public final class ActivityRecStaticPart {
                             secondLayerActivity=TypeEatOrDrink("Activity : SIT.SOFA'");
                             break;
                         case "bedroom":
-                            secondLayerActivity=TypeEatOrDrink("Activity : SITTING");
+                            secondLayerActivity=TypeEatOrDrink("Activity : SITTING BED");
                             break;
                         case "kitchen":
                             secondLayerActivity=TypeEatOrDrink("Activity : SITTING");
@@ -267,7 +267,7 @@ public final class ActivityRecStaticPart {
             res= "Activity : SITTING";
         }else{
             //Log.i("devstdx","value :"+stdDevXBand);
-            if(stdDevXBand>0.2)
+            if(stdDevXBand>0.02)
             {
                 res= "Activity : SITTING";
             }else{
@@ -282,12 +282,12 @@ public final class ActivityRecStaticPart {
         String res = deambulante;
         if (res.equals("Activity : STANDING"))
         {
-            if (XmeansBand > -4 && XmeansBand < 2)
+            if (XmeansBand > -5 && XmeansBand < 2)
             {
                 res =  "Activity : SWEEPING";
             }else if(XmeansBand > 4 && XmeansBand < 10){
                 if (XmeansBand > 8 && XmeansBand < 10){
-                    if(stdDevXBand < 0.8)
+                    if(stdDevXBand < 0.15)
                     {
                         res =  deambulante;
                     }else{
@@ -300,11 +300,11 @@ public final class ActivityRecStaticPart {
             }
         }else if(res.equals("Activity : WALKING"))
         {
-            if (XmeansBand>8.8)
+            if (stdDevXPhone>1.5)
             {
                 res =  deambulante;
             }else{
-                if (XmeansBand > -4 && XmeansBand < 2)
+                if (XmeansBand > -5 && XmeansBand < 2)
                 {
                     res =  "Activity : SWEEPING";
                 }else if(XmeansBand > 4 && XmeansBand < 10){
@@ -319,9 +319,9 @@ public final class ActivityRecStaticPart {
     private String BrushOrHair(String deambulante)
     {
         String res = deambulante;
-        if (ZEnergyBand > 8000){
+        if (ZEnergyBand > 11200){
             res =  "Activity : BRUSHING";
-        }else if(ZEnergyBand < 8000 && ZEnergyBand > 1900)
+        }else if(ZEnergyBand < 11200 && ZEnergyBand > 1900)
         {
             res =  "Activity : HAIRSTYLE";
         }else{
@@ -608,6 +608,11 @@ public final class ActivityRecStaticPart {
     public double getStdDevZBand()
     {
         return stdDevZBand;
+    }
+
+    public double getStdDevXBand()
+    {
+        return stdDevXBand;
     }
 
     public double getXEnergyBand()
