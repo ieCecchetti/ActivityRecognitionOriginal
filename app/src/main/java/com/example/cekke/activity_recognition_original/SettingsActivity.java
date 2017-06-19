@@ -37,7 +37,6 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    private static boolean phoneRec, beaconsRec, bandRec;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -207,19 +206,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
 
-
     @Override
     protected void onStop() {
         super.onStop();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        phoneRec=prefs.getBoolean("example_switch_phone",true);
-        beaconsRec=prefs.getBoolean("example_switch_beacons",true);
-        bandRec=prefs.getBoolean("example_switch_band",true);
+        boolean phoneRec=prefs.getBoolean("example_switch_phone",true);
+        boolean beaconsRec=prefs.getBoolean("example_switch_beacons",true);
+        boolean bandRec=prefs.getBoolean("example_switch_band",true);
+
         String fname=prefs.getString("example_text","ActivityRec_data");
 
-        MainActivity.getRecordersFromSettings(phoneRec,beaconsRec,bandRec);
+        boolean isStaticBeaconSel=prefs.getBoolean("example_switch_getBeaconStatic",true);
+        String staticRoom=prefs.getString("getStaticBeacon_text","none");
+
+        MainActivity.setRecordersFromSettings(phoneRec,beaconsRec,bandRec);
         MainActivity.setStandardFolderName(fname);
+        MainActivity.setStaticBeaconSettings(isStaticBeaconSel, staticRoom);
 
         return;
     }

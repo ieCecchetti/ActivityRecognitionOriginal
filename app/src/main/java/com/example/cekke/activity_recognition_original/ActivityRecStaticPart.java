@@ -34,6 +34,7 @@ public final class ActivityRecStaticPart {
     private static int contDataPhone=0;
     private static int contDataBand=0;
     private static double stdDevXPhone;
+    private static double stdDevYPhone;
     private static double XmeansModulePhone;
     private static double YmeansModulePhone;
     private static double ZmeansModulePhone;
@@ -132,7 +133,8 @@ public final class ActivityRecStaticPart {
         double Zmeans= MathUtils.arithmicMean(valueListZ);
         ZEnergyPhone=energy(valueListZ);
 
-        stdDevXPhone= Math.sqrt(variance(valueListX,Xmeans,valueListY.length));
+        stdDevXPhone= Math.sqrt(variance(valueListX,Xmeans,valueListX.length));
+        stdDevYPhone= Math.sqrt(variance(valueListY,Ymeans,valueListY.length));
 
         XmeansModulePhone=Math.abs(Xmeans);
         YmeansModulePhone=Math.abs(Ymeans);
@@ -172,8 +174,17 @@ public final class ActivityRecStaticPart {
         XEnergyBand= energy(valueListXBand);
         ZEnergyBand= energy(valueListZBand);
 
-        String room=BeaconIdToRoom(MainActivity.NearestBeaconId);
-        room="livingroom";
+        String room="kitchen";
+        //String room=BeaconIdToRoom(MainActivity.NearestBeaconId);
+
+        /*if(!MainActivity.getBeaconStaticStatus())
+        {
+            room=BeaconIdToRoom(MainActivity.NearestBeaconId);
+            Log.i("eddaje","static mode reserced ..."+ room);
+        }else{
+            room=MainActivity.getBeaconStaticRoom();
+            Log.i("eddaje","static mode setted ..."+ room);
+        }*/
 
         if(firstLayerActivity.equals("Activity : SITTING"))
         {
@@ -258,16 +269,17 @@ public final class ActivityRecStaticPart {
         }else{
             secondLayerActivity=firstLayerActivity;
         }
+        secondLayerActivity = ValidateRoom(room,secondLayerActivity);
     }
 
-    private String LyingOrSittingVerify(String FL, String rom){
-        String res=FL;
+    private String LyingOrSittingVerify(String SL, String rom){
+        String res=SL;
         //verify first layer (sitting or lying)
         if (XmeansBand>1){
             res= "Activity : SITTING";
         }else{
             //Log.i("devstdx","value :"+stdDevXBand);
-            if(stdDevXBand>0.02)
+            if(XEnergyBand>500)
             {
                 res= "Activity : SITTING";
             }else{
@@ -285,9 +297,9 @@ public final class ActivityRecStaticPart {
             if (XmeansBand > -5 && XmeansBand < 2)
             {
                 res =  "Activity : SWEEPING";
-            }else if(XmeansBand > 4 && XmeansBand < 10){
-                if (XmeansBand > 8 && XmeansBand < 10){
-                    if(stdDevXBand < 0.15)
+            }else if(XmeansBand > 4 && XmeansBand < 11){
+                if (XmeansBand > 8 && XmeansBand < 11){
+                    if(stdDevXBand < 0.35) //0.15
                     {
                         res =  deambulante;
                     }else{
@@ -300,7 +312,7 @@ public final class ActivityRecStaticPart {
             }
         }else if(res.equals("Activity : WALKING"))
         {
-            if (stdDevXPhone>1.5)
+            if (stdDevYPhone>1.7)
             {
                 res =  deambulante;
             }else{
@@ -335,7 +347,7 @@ public final class ActivityRecStaticPart {
         String res = deambulante;
         //drink or eating
         if (ZmeansBand > 7){
-            if(getXmeansBand()<0)  //stdDevZBand>0.1
+            if(getXmeansBand()<0.1)  //stdDevZBand>0.1
             {
                 res =  "Activity : TYPING";
             }else{
@@ -348,6 +360,31 @@ public final class ActivityRecStaticPart {
             }else{
                 res =  "Activity : DRINKING";
             }
+        }
+        return res;
+    }
+
+    private String ValidateRoom(String rom, String SL){
+        String res=SL;
+        if (rom == "livingroom" && SL.equals("Activity : EATING"))
+        {
+            secondLayerActivity=firstLayerActivity;
+            Log.i("error","eatInLiving");
+        }
+        else if(rom == "livingroom" && SL.equals("Activity : DRINKING"))
+        {
+            secondLayerActivity=firstLayerActivity;
+            Log.i("error","drinkInLiving");
+
+        }else if(rom == "bedroom" && SL.equals("Activity : EATING"))
+        {
+            secondLayerActivity=firstLayerActivity;
+            Log.i("error","eatInBed");
+
+        }else if(rom == "bedroom" && SL.equals("Activity : DRINKING"))
+        {
+            res=firstLayerActivity;
+            Log.i("error","drinkInBed");
         }
         return res;
     }
@@ -570,6 +607,11 @@ public final class ActivityRecStaticPart {
         return stdDevXPhone;
     }
 
+    public double getStdDevYPhone()
+    {
+        return stdDevYPhone;
+    }
+
     public double getXmeansModule()
     {
         return XmeansModulePhone;
@@ -671,10 +713,10 @@ public final class ActivityRecStaticPart {
             case "44943":
                 return "kitchen";
 
-            case "66435":
+            case "51811":
                 return "livingroom";
 
-            case "8679":
+            case "55179":
                 return "bedroom";
 
             default:

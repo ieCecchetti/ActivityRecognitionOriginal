@@ -22,7 +22,7 @@ public class Fragment_1intro extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_1intro, container, false);
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) rootView.findViewById(R.id.collapse_toolbar);
-        collapsingToolbarLayout.setTitle("Give me a title Homie!");
+        collapsingToolbarLayout.setTitle("ACTIVITY PRECOG");
 
         collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(rootView.getContext(),R.color.colorPrimaryDark));
 

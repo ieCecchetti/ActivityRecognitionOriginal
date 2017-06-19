@@ -136,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String beaconsDesc;
     public static String NearestBeaconId="";
     public static double NearestBeaconDistance=5.0;
+    private static boolean isStaticRoomSel=false;
+    private static String staticBeaconRoom="none";
 
     //-----------------------------------------------------------folder and general path
     public static String appFolder="ActivityRecognitionOfficial";
@@ -204,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         phoneRec=prefs.getBoolean("example_switch_phone",true);
         beaconRec=prefs.getBoolean("example_switch_beacons",true);
         bandRec=prefs.getBoolean("example_switch_band",true);
+        isStaticRoomSel=prefs.getBoolean("example_switch_getBeaconStatic",true);
+        staticBeaconRoom=prefs.getString("getStaticBeacon_text","none");
 
         //notification init code
         notification = new Notification.Builder(this);
@@ -429,12 +433,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    public static void getRecordersFromSettings(boolean phone, boolean beacon, boolean band)
+    public static void setRecordersFromSettings(boolean phone, boolean beacon, boolean band)
     {
         phoneRec= phone;
         beaconRec=beacon;
         bandRec=band;
     }
+
+    public static void setStaticBeaconSettings(boolean isset, String rom)
+    {
+        isStaticRoomSel= isset;
+        staticBeaconRoom= rom;
+    }
+
+    public static boolean getBeaconStaticStatus()
+    {
+        return isStaticRoomSel;
+    }
+
+    public static String getBeaconStaticRoom()
+    {
+        return staticBeaconRoom;
+    }
+
     public static String getStandardFolderName()
     {
         return FolderNameStandard;
@@ -707,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Start Recording for the second layer
                     firstLayer = staticCalculatorObj.getFirstLayerActivity();
                     secondLayer = staticCalculatorObj.getSecondLayerActivity();
-                    Fragment_2recorder.setDataFromMainClass1L(String.valueOf(staticCalculatorObj.getStdDevX()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
+                    Fragment_2recorder.setDataFromMainClass1L(String.valueOf(staticCalculatorObj.getStdDevYPhone()), String.valueOf(staticCalculatorObj.getXmeansModule()), String.valueOf(staticCalculatorObj.getYmeansModule()),
                             String.valueOf(staticCalculatorObj.getZmeansModule()), String.valueOf(staticCalculatorObj.getStdDevXYZ()), String.valueOf(staticCalculatorObj.getEnergyZ()), firstLayer);
                     Fragment_2recorder.setDataFromMainClass2L(String.valueOf(staticCalculatorObj.getXmeansBand()), String.valueOf(staticCalculatorObj.getZmeansBand()), String.valueOf(staticCalculatorObj.getStdDevZBand()),
                             String.valueOf(staticCalculatorObj.getStdDevXBand()), String.valueOf(staticCalculatorObj.getXEnergyBand()),String.valueOf(staticCalculatorObj.getZEnergyBand()), secondLayer);
@@ -722,7 +743,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     activityList.add(secondLayer.split(":")[1]);
                     featureList.add("Xmean: "+staticCalculatorObj.getXmeansBand()+"\nZmean: "+staticCalculatorObj.getZmeansBand()+"\nZdevStd: "+
                                     staticCalculatorObj.getStdDevZBand()+"\nXdevStd: "+staticCalculatorObj.getStdDevXBand()+"\nXenergy: "+staticCalculatorObj.getXEnergyBand()
-                                    +"\nZenergy: "+staticCalculatorObj.getZEnergyBand()+"\n1Lyaer: "+firstLayer.split(":")[1]);
+                                    +"\nZenergy: "+staticCalculatorObj.getZEnergyBand()+"\nYdevSPhone: "+staticCalculatorObj.getStdDevYPhone()+"\n1Layer: "+firstLayer.split(":")[1]);
                     dateList.add(projectUtils.getDate());
                     activityLoop();
                 }

@@ -1,17 +1,20 @@
 <resources>
-    <string name="app_name">Activity_Recognition</string>
+    <string name="app_name">Activity Recog</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_settings">Settings</string>
     //--------------------------------------------------------------------INTRO
 
     <string name="welcome_title">WELCOME IN ACTIVITY RECOGNITION</string>
-    <string name="welcome_collaborator">Software by Enrico Cecchetti</string>
+    <string name="welcome_collaborator">Software by Enrico Cecchetti
+                                        \nMarco Maiolatesi
+                                        \nAlex De Cesare</string>
 
 
     //---------------------------------------------------------------------CUSTOM SETTINGS
 
     <string name="pref_header_custom">Record devices</string>
+    <string name="pref_header_special">Special Settings</string>
 
     <string name="pref_record_Band">Record Band Data</string>
     <string name="pref_record_Phone">Record Phone Data</string>
@@ -23,6 +26,13 @@
     <string name="pref_record_folderName_display_name">Standard Folder Name</string>
     <string name="pref_record_folderName_display_info">New record standard FolderName</string>
     <string name="pref_record_folderName_model">ActivityRec_data</string>
+
+    <string name="pref_record_Beacon">Record Beacons Data</string>
+    <string name="pref_special_Beacon_info">Enable Static Beacon Resource</string>
+
+    <string name="pref_special_BeaconStatic_name">Beacon Room</string>
+    <string name="pref_special_BeaconStatic_info">Set static room</string>
+    <string name="pref_special_BeaconStatic_model">none</string>
 
     //--------------------------------------------------------------------NOTIFICATION
     <string name="main_notification_title">Activity Recognition</string>
@@ -40,21 +50,29 @@
     //--------------------------------------------------------------------FRAME 1
     <string name="frame_1_Head">ACTIVITY RECOGNITION TOOL</string>
     <string name="frame_1_Intro">Welcome in the activity recognition tool. Having fun recording your movement!</string>
-    <string name="card_one">First fucking Card man</string>
+    <string name="card_one">Benvenuto nella nostra app!</string>
     <string name="card_one_text">
-        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
-        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+        Una nuova applicazione per il riconoscimento di attività umane. Posso riconoscere fino ad 11 attività: 4 di base, realtive alla
+        tua deambulazione e 7 riguardanti la tua vita quotidiana, mangiare, bere, usare il PC, pulire con la scopa/aspirapolvere, asciugarsi
+        i capelli, lavarsi denti.
     </string>
 
-    <string name="card_two">Second fucking Card man</string>
+    <string name="card_two">Riconosco la tua postura</string>
     <string name="card_two_text">
-        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
-        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+        Mediante l\' accelerometro del tuo smartphone, distinguo semplicemente se sei in posizione eretta,
+        sdraiato, seduto o se sei in fase di cammino. Mi raccomando, non indossare
+        il telefono in tasca al contrario! Posizionalo con il retro verso la tua gamba e schermo rivolto in alto.
     </string>
-    <string name="card_three">Third fucking Card man</string>
+    <string name="card_three">Ti localizzo</string>
     <string name="card_three_text">
-        Android è un sistema operativo per dispositivi mobili sviluppato da Google Inc. e basato sul kernel Linux; non è però da considerarsi propriamente
-        un sistema unix-like o una distribuzione GNU/Linux,[3][4] dato che la quasi totalità delle utilità GNU è sostituita da software in Java.
+        Tramite l\' utilizzo di beacons individuo in quale ambiente della casa sei. Posizionane uno in ogni stanza
+        in cui tu voglia essere localizzato. Ricordati di associarmeli e posizionarli sempre nella stessa stanza.
+    </string>
+    <string name="card_four">Distinguo le tue attività</string>
+    <string name="card_four_text">
+        Grazie all\' acceleromentro del Microsoft Band, posso riconoscere quale delle 11 attività
+        sopraelencate stai svolgendo. Verifica sempre che il bluetooth del telefono sia acceso e di indossare il band con i
+        pulsanti verso l\' alto. Puoi associarmi ad un solo dispositivo per volta.
     </string>
 
 

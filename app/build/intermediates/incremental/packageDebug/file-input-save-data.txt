@@ -1,7 +1,7 @@
 #Internal package file, do not edit.
-#Sun Jun 18 02:21:23 CEST 2017
+#Mon Jun 19 18:58:14 CEST 2017
 14.set=ANDROID_RESOURCE
-180.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_action_menu_layout.xml
+180.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\fragment_1intro.xml
 118.set=ANDROID_RESOURCE
 60.set=ANDROID_RESOURCE
 2.set=ANDROID_RESOURCE
@@ -59,7 +59,7 @@
 154.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png
 167.set=ANDROID_RESOURCE
 24.set=ANDROID_RESOURCE
-181.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\fragment_1intro.xml
+181.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_action_menu_layout.xml
 128.set=ANDROID_RESOURCE
 70.set=DEX
 27.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_btn_radio_to_on_mtrl_015.png
@@ -103,7 +103,7 @@
 22.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 27.set=ANDROID_RESOURCE
 74.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-205.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\anim\\design_fab_in.xml
+205.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\design_menu_item_action_area.xml
 128.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_ic_menu_paste_mtrl_am_alpha.png
 73.set=ANDROID_RESOURCE
 7.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
@@ -144,7 +144,7 @@
 169.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\mipmap-xxxhdpi-v4\\ic_launcher.png
 200.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 123.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5
-144.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color\\abc_primary_text_material_dark.xml
+144.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png
 175.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_13b4e2677199aa54339760a45e7b6abd81b8a85e
 120.set=ANDROID_RESOURCE
 2.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\printfile.png
@@ -156,7 +156,7 @@
 37.set=JAVA_RESOURCE
 75.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\com.android.support-support-v4-23.1.1_49bb4b47335aa932b951923bb851acd2a6ead6c9
 50.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-206.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\design_menu_item_action_area.xml
+206.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\anim\\design_fab_in.xml
 129.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\mipmap-xhdpi-v4\\ic_launcher.png
 83.set=ANDROID_RESOURCE
 8.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
@@ -176,7 +176,7 @@
 31.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\anim\\abc_slide_in_top.xml
 155.set=DEX
 62.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-23.1.1_07fc2598493dd02c70e8c3cc08f7b3beec4e619a
-83.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\bandstatus.png
+83.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\notification_template_part_chronometer.xml
 137.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 12.set=ANDROID_RESOURCE
 189.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
@@ -201,7 +201,7 @@
 201.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 70.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_5\\classes.dex
 124.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-145.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png
+145.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color\\abc_primary_text_material_dark.xml
 176.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 130.set=ANDROID_RESOURCE
 177.set=ANDROID_RESOURCE
@@ -233,7 +233,7 @@
 32.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\abc_item_background_holo_light.xml
 165.set=ANDROID_RESOURCE
 63.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-84.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\notification_template_part_chronometer.xml
+84.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_ic_menu_moreoverflow_mtrl_alpha.png
 138.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 22.set=ANDROID_RESOURCE
 113.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
@@ -285,7 +285,7 @@
 58.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\fragment_3status.xml
 33.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_dialog_title_material.xml
 64.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-85.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_ic_menu_moreoverflow_mtrl_alpha.png
+85.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\bandstatus.png
 139.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\com.android.support-appcompat-v7-23.1.1_a8a043a1d33199b1a12d029706f0767224e5d1c1
 32.set=ANDROID_RESOURCE
 60.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\anim\\design_snackbar_in.xml
@@ -350,7 +350,7 @@
 198.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\xml\\pref_custom.xml
 121.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_action_menu_item_layout.xml
 0.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-173.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\abc_btn_borderless_material.xml
+173.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_btn_rating_star_on_mtrl_alpha.png
 107.set=ANDROID_RESOURCE
 153.set=ANDROID_RESOURCE
 19.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\fragment_4show.xml
@@ -406,7 +406,7 @@ count=208
 122.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-anydpi-v21\\ic_sync_black_24dp.xml
 13.set=ANDROID_RESOURCE
 1.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-174.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_btn_rating_star_on_mtrl_alpha.png
+174.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\abc_btn_borderless_material.xml
 117.set=DEX
 1.set=ANDROID_RESOURCE
 163.set=ANDROID_RESOURCE
@@ -459,7 +459,7 @@ count=208
 166.set=ANDROID_RESOURCE
 148.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color\\abc_secondary_text_material_dark.xml
 144.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
-200.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color\\switch_thumb_material_light.xml
+200.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_popup_menu_item_layout.xml
 123.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4a6743336e1e678f5e928da5427cf19322b9e4b5\\classes.dex
 23.set=ANDROID_RESOURCE
 2.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
@@ -514,7 +514,7 @@ count=208
 149.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png
 145.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_
 170.set=ANDROID_RESOURCE
-201.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_popup_menu_item_layout.xml
+201.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color\\switch_thumb_material_light.xml
 124.file=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml
 33.set=ANDROID_RESOURCE
 3.base=C\:\\Users\\cekke\\AndroidStudioProjects\\ActivityRecognitionOriginal\\app\\build\\intermediates\\res\\resources-debug.ap_

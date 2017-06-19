@@ -35,4 +35,21 @@
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="example_switch_getBeaconStatic"
+        android:summary="@string/pref_special_Beacon_info"
+        android:title="@string/pref_record_Beacon" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_special_BeaconStatic_model"
+        android:inputType="textCapWords"
+        android:key="getStaticBeacon_text"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/pref_special_BeaconStatic_info"
+        android:title="@string/pref_special_BeaconStatic_name" />
+
 </PreferenceScreen>

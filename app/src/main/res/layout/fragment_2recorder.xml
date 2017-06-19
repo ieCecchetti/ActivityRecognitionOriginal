@@ -99,7 +99,7 @@
                 android:id="@+id/tv_features" />
 
             <TextView
-                android:text="phone_DEV.STD(X) : "
+                android:text="phone_DEV.STD(Y) : "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_feature1Text"

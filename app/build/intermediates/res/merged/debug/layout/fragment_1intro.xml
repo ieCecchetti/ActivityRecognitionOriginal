@@ -157,14 +157,14 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColor"
                         android:textSize="20sp"
-                        android:text="@string/card_three"/>
+                        android:text="@string/card_four"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColor"
                         android:textSize="15dp"
-                        android:text="@string/card_three_text"/>
+                        android:text="@string/card_four_text"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
